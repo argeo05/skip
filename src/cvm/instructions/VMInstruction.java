@@ -5,7 +5,12 @@ package cvm.instructions;
  * Based interface for instuctions.
  */
 public sealed interface VMInstruction permits BinaryInstruction, Debug, Load, Log {
-  void popArgs();
+    void popArgs();
 
-  void exec();
+    void run();
+
+    default void exec() {
+        popArgs();
+        run();
+    }
 }

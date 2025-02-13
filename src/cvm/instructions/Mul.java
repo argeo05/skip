@@ -12,12 +12,12 @@ import cvm.Context;
  */
 
 public final class Mul extends BinaryInstruction {
-  public Mul(Context ctx) {
-    super(ctx);
-  }
+    public Mul(Context ctx) {
+        super(ctx);
+    }
 
-  @Override
-  long calc() {
-    return lhs * rhs;
-  }
+    @Override
+    long calc() {
+        return lhs * rhs;
+    }
 }

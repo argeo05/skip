@@ -12,12 +12,12 @@ import cvm.Context;
  */
 
 public final class Div extends BinaryInstruction {
-  public Div(Context ctx) {
-    super(ctx);
-  }
+    public Div(Context ctx) {
+        super(ctx);
+    }
 
-  @Override
-  long calc() {
-    return lhs / rhs;
-  }
+    @Override
+    long calc() {
+        return lhs / rhs;
+    }
 }

@@ -12,12 +12,12 @@ import cvm.Context;
  */
 
 public final class Sub extends BinaryInstruction {
-  public Sub(Context ctx) {
-    super(ctx);
-  }
+    public Sub(Context ctx) {
+        super(ctx);
+    }
 
-  @Override
-  long calc() {
-    return lhs - rhs;
-  }
+    @Override
+    long calc() {
+        return lhs - rhs;
+    }
 }

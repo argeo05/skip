@@ -9,21 +9,21 @@ import cvm.Context;
  * @bytecode load
  */
 public final class Load implements VMInstruction {
-  Context ctx;
-  long value;
+    Context ctx;
+    long value;
 
-  public Load(long value, Context ctx) {
-    this.value = value;
-    this.ctx = ctx;
-  }
+    public Load(long value, Context ctx) {
+        this.value = value;
+        this.ctx = ctx;
+    }
 
-  @Override
-  public void popArgs() {
+    @Override
+    public void popArgs() {
 
-  }
+    }
 
-  @Override
-  public void exec() {
-    ctx.push(value);
-  }
+    @Override
+    public void run() {
+        ctx.push(value);
+    }
 }

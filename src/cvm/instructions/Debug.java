@@ -9,20 +9,20 @@ import cvm.Context;
  * @bytecode debug
  */
 public final class Debug implements VMInstruction {
-  Context ctx;
-  long value;
+    Context ctx;
+    long value;
 
-  public Debug(Context ctx) {
-    this.ctx = ctx;
-  }
+    public Debug(Context ctx) {
+        this.ctx = ctx;
+    }
 
-  @Override
-  public void popArgs() {
-    value = ctx.pop();
-  }
+    @Override
+    public void popArgs() {
+        value = ctx.pop();
+    }
 
-  @Override
-  public void exec() {
-    System.out.println(value);
-  }
+    @Override
+    public void run() {
+        System.out.println(value);
+    }
 }
