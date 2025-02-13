@@ -4,6 +4,13 @@ import cvm.instructions.Sub;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
+/**
+ * <b>Sub</b>
+ * InstructionBuilder. Builds subtraction instruction.
+ *
+ * @link Uses instruction #{@link Sub}
+ * @bytecode sub
+ */
 @InstrBuilder("sub")
 public class SubBuilder extends InstructionBuilder {
     @Override

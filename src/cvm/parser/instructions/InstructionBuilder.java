@@ -5,6 +5,12 @@ import cvm.instructions.VMInstruction;
 
 import java.util.Arrays;
 
+/**
+ * <b>Instruction</b>
+ * InstructionBuilder. Builds a generic instruction.
+ *
+ * @link Uses instruction #{@link VMInstruction}
+ */
 public abstract class InstructionBuilder {
     protected Context ctx;
     protected String[] args;

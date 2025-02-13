@@ -1,9 +1,17 @@
 package cvm.parser.instructions;
 
+import cvm.instructions.Add;
 import cvm.instructions.Debug;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
+/**
+ * <b>Debug</b>
+ * InstructionBuilder. Builds debug instruction.
+ *
+ * @link Uses instruction #{@link Debug}
+ * @bytecode debug
+ */
 @InstrBuilder("debug")
 public class DebugBuilder extends InstructionBuilder {
     @Override

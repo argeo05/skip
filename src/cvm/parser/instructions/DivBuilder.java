@@ -4,6 +4,13 @@ import cvm.instructions.Div;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
+/**
+ * <b>Div</b>
+ * InstructionBuilder. Builds division instruction.
+ *
+ * @link Uses instruction #{@link Div}
+ * @bytecode div
+ */
 @InstrBuilder("div")
 public class DivBuilder extends InstructionBuilder {
     @Override

@@ -4,6 +4,13 @@ import cvm.instructions.Mul;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
+/**
+ * <b>Mul</b>
+ * InstructionBuilder. Builds multiplication instruction.
+ *
+ * @link Uses instruction #{@link Mul}
+ * @bytecode mul
+ */
 @InstrBuilder("mul")
 public class MulBuilder extends InstructionBuilder {
     @Override

@@ -4,6 +4,13 @@ import cvm.instructions.Load;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
+/**
+ * <b>Load</b>
+ * InstructionBuilder. Builds load instruction.
+ *
+ * @link Uses instruction #{@link Load}
+ * @bytecode load
+ */
 @InstrBuilder("ld")
 public class LoadBuilder extends InstructionBuilder {
     @Override
