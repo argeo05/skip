@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Debug</b>
- * Instruction that prints last stack value.
+ * Instruction. Pops last stack value and prints it.
  *
  * @bytecode debug
  */

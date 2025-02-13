@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Sub</b>
- * Instruction that gives a subtraction.
+ * Instruction. Pops two args and pushes their subtraction.
  *
  * @bytecode sub
  * @stackArg lhs minuend

@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Load</b>
- * Instruction that takes two arguments to put them into stack.
+ * Instruction. Puts argument into stack.
  *
  * @bytecode load
  */

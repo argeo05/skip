@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Log</b>
- * Instruction that prints to log.
+ * Instruction. Prints top stack value.
  *
  * @bytecode log
  * @stackArg value argument

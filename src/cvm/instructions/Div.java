@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Div</b>
- * Instruction that gives a division.
+ * Instruction. Pops two args and pushes their division.
  *
  * @bytecode div
  * @stackArg lhs dividend

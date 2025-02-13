@@ -4,7 +4,7 @@ import cvm.Context;
 
 /**
  * <b>Mul</b>
- * Instruction that gives a product.
+ * Instruction. Pops last stack value and pushes their product.
  *
  * @bytecode mul
  * @stackArg lhs first multiplier
