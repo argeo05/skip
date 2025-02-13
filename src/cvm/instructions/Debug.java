@@ -18,7 +18,7 @@ public final class Debug implements VMInstruction {
 
   @Override
   public void popArgs() {
-    value = ctx.peek();
+    value = ctx.pop();
   }
 
   @Override
