@@ -5,7 +5,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Load</b>
+ * <b>LoadBuilder</b>
  * InstructionBuilder. Builds load instruction.
  *
  * @link Uses instruction #{@link Load}

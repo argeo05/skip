@@ -5,7 +5,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Mul</b>
+ * <b>MulBuilder</b>
  * InstructionBuilder. Builds multiplication instruction.
  *
  * @link Uses instruction #{@link Mul}

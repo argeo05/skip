@@ -5,7 +5,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Div</b>
+ * <b>DivBuilder</b>
  * InstructionBuilder. Builds division instruction.
  *
  * @link Uses instruction #{@link Div}

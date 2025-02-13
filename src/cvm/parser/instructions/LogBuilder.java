@@ -5,7 +5,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Log</b>
+ * <b>LogBuilder</b>
  * InstructionBuilder. Builds log instruction.
  *
  * @link Uses instruction #{@link Log}

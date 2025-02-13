@@ -6,7 +6,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Debug</b>
+ * <b>DebugBuilder</b>
  * InstructionBuilder. Builds debug instruction.
  *
  * @link Uses instruction #{@link Debug}

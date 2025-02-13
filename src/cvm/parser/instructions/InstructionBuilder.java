@@ -6,7 +6,7 @@ import cvm.instructions.VMInstruction;
 import java.util.Arrays;
 
 /**
- * <b>Instruction</b>
+ * <b>InstructionBuilder</b>
  * InstructionBuilder. Builds a generic instruction.
  *
  * @link Uses instruction #{@link VMInstruction}

@@ -5,7 +5,7 @@ import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
 /**
- * <b>Sub</b>
+ * <b>SubBuilder</b>
  * InstructionBuilder. Builds subtraction instruction.
  *
  * @link Uses instruction #{@link Sub}
