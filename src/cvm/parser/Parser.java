@@ -38,10 +38,15 @@ public class Parser {
                         }
                         case ";" -> { /* Comment */ }
                         default -> {
-                            VMInstruction res = resolve(instr[0])
-                                    .setCtx(ctx)
-                                    .setArgs(copyOfRange(instr, 1, instr.length))
-                                    .build();
+                            VMInstruction res = null;
+                            try {
+                                res = resolve(instr[0])
+                                        .setCtx(ctx)
+                                        .setArgs(copyOfRange(instr, 1, instr.length))
+                                        .build();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             curr.addInstruction(res);
                         }
                     }
