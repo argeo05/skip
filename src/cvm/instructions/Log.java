@@ -20,7 +20,7 @@ public final class Log implements VMInstruction {
 
     @Override
     public void popArgs() {
-        value = ctx.top();
+        value = ctx.pop();
     }
 
     @Override

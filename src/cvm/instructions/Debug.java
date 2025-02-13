@@ -18,11 +18,10 @@ public final class Debug implements VMInstruction {
 
     @Override
     public void popArgs() {
-        value = ctx.pop();
     }
 
     @Override
     public void run() {
-        System.out.println(value);
+        System.out.println(ctx.top());
     }
 }
