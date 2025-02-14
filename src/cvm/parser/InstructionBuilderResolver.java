@@ -1,11 +1,21 @@
 package cvm.parser;
 
+import utils.InstrBuilder;
 import cvm.parser.instructions.InstructionBuilder;
 
-public class InstructionBuilderResolver {
-    private static final ClassFinder FINDER = new ClassFinder("cvm.parser.instructions");
+import java.util.List;
 
-    public static InstructionBuilder resolve(String name) throws Exception {
-        return FINDER.resolve(name);
+public class InstructionBuilderResolver {
+    private static final List<Class<?>> CLASSES = new ClassFinder("cvm.parser.instructions").findClasses();
+
+    public static InstructionBuilder resolve(String instrName) throws Exception {
+        for (Class<?> clazz : CLASSES) {
+            InstrBuilder annotation = clazz.getAnnotation(InstrBuilder.class);
+            if (annotation != null && annotation.value().equals(instrName)) {
+                return (InstructionBuilder) clazz.getDeclaredConstructor().newInstance();
+            }
+        }
+
+        throw new IllegalArgumentException("Builder not found for: " + instrName);
     }
 }
