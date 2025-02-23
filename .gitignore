@@ -32,3 +32,5 @@ bin/
 /.idea/misc.xml
 /.idea/checkstyle-idea.xml
 /.idea/.gitignore
+/manifest/
+/manifest/
