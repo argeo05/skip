@@ -16,6 +16,5 @@ public class Main {
         new Parser().setCode(code).setCtx(ctx).parse();
 
         ctx.start();
-
     }
 }
