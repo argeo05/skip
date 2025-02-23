@@ -57,7 +57,9 @@ public class ClassFinder {
 
     private void processDirectory(URL resource, List<Class<?>> classes) throws URISyntaxException {
         File dir = new File(resource.toURI());
-        if (!dir.exists()) return;
+        if (!dir.exists()) {
+            return;
+        }
         scanDirectory(dir, basePackage, classes);
     }
 
