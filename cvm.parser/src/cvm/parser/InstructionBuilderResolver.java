@@ -1,5 +1,6 @@
 package cvm.parser;
 
+import utils.ClassFinder;
 import utils.InstrBuilder;
 import cvm.parser.instructions.InstructionBuilder;
 

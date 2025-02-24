@@ -1,4 +1,4 @@
-package cvm.parser;
+package cvm;
 
 import cvm.instructions.VMInstruction;
 

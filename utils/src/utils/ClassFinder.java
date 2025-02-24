@@ -1,4 +1,4 @@
-package cvm.parser;
+package utils;
 
 import java.io.File;
 import java.net.URISyntaxException;

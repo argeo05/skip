@@ -1,3 +1,5 @@
+package app;
+
 import cvm.Context;
 import cvm.parser.Parser;
 

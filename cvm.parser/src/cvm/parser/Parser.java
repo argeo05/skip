@@ -1,6 +1,7 @@
 package cvm.parser;
 
 import cvm.Context;
+import cvm.Function;
 import cvm.instructions.VMInstruction;
 
 import static cvm.parser.InstructionBuilderResolver.resolve;

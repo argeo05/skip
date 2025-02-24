@@ -1,6 +1,6 @@
 package cvm;
 
-import cvm.parser.Function;
+import cvm.Function;
 
 import java.util.HashMap;
 import java.util.Map;
