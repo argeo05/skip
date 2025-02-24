@@ -10,7 +10,7 @@ public record Function(
         List<VMInstruction> code
 ) {
     public Function(String name) {
-        this(name, new ArrayList<>()); // TODO maybe LinkedList
+        this(name, new ArrayList<>());
     }
 
     public void exec() {

@@ -6,7 +6,7 @@ import cvm.Context;
  * <b>Load</b>
  * Instruction. Puts argument into stack.
  *
- * @bytecode load
+ * @bytecode ld
  */
 public final class Load implements VMInstruction {
     Context ctx;

@@ -1,6 +1,5 @@
 package cvm.parser.instructions;
 
-import cvm.instructions.Add;
 import cvm.instructions.Debug;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
