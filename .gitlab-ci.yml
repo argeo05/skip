@@ -1,0 +1,17 @@
+default:
+  tags:
+    - docker
+  image: gradle:jdk21-noble
+
+
+stages:
+  - test
+
+vm_build_and_run:
+  stage: test
+  script:
+    - gradle clean build
+    - gradle run --args=""
+    - OUTPUT=$(gradle run --quiet --args="")
+    - test "$OUTPUT" = "12" || (echo "Test failed: $OUTPUT != 12" && exit 1)
+    - echo "Test passed: $OUTPUT == 12"
