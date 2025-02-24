@@ -13,5 +13,10 @@ vm_build_and_run:
     - gradle clean build
     - gradle run --args=""
     - OUTPUT=$(gradle run --quiet --args="")
-    - test "$OUTPUT" = "12" || (echo "Test failed: $OUTPUT != 12" && exit 1)
-    - echo "Test passed: $OUTPUT == 12"
+    - |
+      if test "$OUTPUT" = "12"; then
+        echo "Test passed: $OUTPUT == 12"
+      else
+        echo "Test failed: $OUTPUT != 12"
+        exit 1
+      fi
