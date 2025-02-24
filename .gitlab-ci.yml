@@ -11,8 +11,7 @@ vm_build_and_run:
   stage: test
   script:
     - gradle clean build
-    - gradle run --args=""
-    - OUTPUT=$(gradle run --quiet --args="")
+    - OUTPUT=$(gradle run --quiet)
     - |
       if test "$OUTPUT" = "12"; then
         echo "Test passed: $OUTPUT == 12"
