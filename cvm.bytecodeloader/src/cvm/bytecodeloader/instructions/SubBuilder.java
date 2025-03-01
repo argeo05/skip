@@ -1,4 +1,4 @@
-package cvm.parser.instructions;
+package cvm.bytecodeloader.instructions;
 
 import cvm.instructions.Sub;
 import cvm.instructions.VMInstruction;

@@ -1,23 +1,23 @@
-package cvm.parser;
+package cvm.bytecodeloader;
 
 import cvm.Context;
 import cvm.Function;
 import cvm.instructions.VMInstruction;
 
-import static cvm.parser.InstructionBuilderResolver.resolve;
+import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
 import static java.util.Arrays.copyOfRange;
 
-public class Parser {
+public class ByteCodeLoader {
     String code;
     private Function curr = null;
     Context ctx;
 
-    public Parser setCode(String code) {
+    public ByteCodeLoader setCode(String code) {
         this.code = code;
         return this;
     }
 
-    public Parser setCtx(Context ctx) {
+    public ByteCodeLoader setCtx(Context ctx) {
         this.ctx = ctx;
         return this;
     }

@@ -1,7 +1,7 @@
 package app;
 
 import cvm.Context;
-import cvm.parser.Parser;
+import cvm.bytecodeloader.ByteCodeLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,7 +31,7 @@ public class Main {
 
     private static void startVM(String code) {
         Context ctx = new Context();
-        new Parser().setCode(code).setCtx(ctx).parse();
+        new ByteCodeLoader().setCode(code).setCtx(ctx).parse();
         ctx.start();
     }
 }

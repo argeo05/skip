@@ -1,13 +1,13 @@
-package cvm.parser;
+package cvm.bytecodeloader;
 
 import utils.ClassFinder;
 import utils.InstrBuilder;
-import cvm.parser.instructions.InstructionBuilder;
+import cvm.bytecodeloader.instructions.InstructionBuilder;
 
 import java.util.List;
 
 public class InstructionBuilderResolver {
-    private static final List<Class<?>> CLASSES = new ClassFinder("cvm.parser.instructions").findClasses();
+    private static final List<Class<?>> CLASSES = new ClassFinder("cvm.bytecodeloader.instructions").findClasses();
 
     public static InstructionBuilder resolve(String instrName) throws Exception {
         for (Class<?> clazz : CLASSES) {

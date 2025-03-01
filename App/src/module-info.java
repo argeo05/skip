@@ -1,4 +1,3 @@
 module App {
-    requires cvm.core;
-    requires cvm.parser;
+    requires cvm.bytecodeloader;
 }
