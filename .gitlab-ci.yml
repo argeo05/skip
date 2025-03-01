@@ -5,8 +5,18 @@ default:
 
 stages:
   - Testing
+  - DeployDocs
 
 test:
   stage: Testing
   script:
     - tests/test.sh
+
+gitlabPages:
+  stage: DeployDocs
+  script:
+    - mkdir -p public
+    - cp -r docs/* public/
+  artifacts:
+    paths:
+      - public
