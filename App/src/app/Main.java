@@ -30,7 +30,6 @@ public class Main {
     }
 
     private static void startVM(String code) {
-        System.out.println("Starting the virtual machine...");
         Context ctx = new Context();
         new Parser().setCode(code).setCtx(ctx).parse();
         ctx.start();
