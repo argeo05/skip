@@ -3,19 +3,10 @@ default:
     - docker
   image: gradle:jdk21-noble
 
-
 stages:
-  - test
+  - Testing
 
-vm_build_and_run:
-  stage: test
+test:
+  stage: Testing
   script:
-    - gradle clean build
-    - OUTPUT=$(gradle run --quiet)
-    - |
-      if test "$OUTPUT" = "12"; then
-        echo "Test passed: $OUTPUT == 12"
-      else
-        echo "Test failed: $OUTPUT != 12"
-        exit 1
-      fi
+    - tests/test.sh
