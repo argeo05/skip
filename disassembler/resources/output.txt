@@ -1,0 +1,5 @@
+fun main
+    LD 7
+    LD 5
+    ADD
+    LOG
