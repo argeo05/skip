@@ -7,7 +7,7 @@ import java.util.Map;
  * Enumerates the available commands with their corresponding opcodes.
  */
 public enum Commands {
-    ID(0),
+    LD(0),
     ADD(1),
     SUB(2),
     MUL(3),
