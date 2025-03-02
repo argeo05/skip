@@ -1,4 +1,4 @@
-package cvm.disassembler;
+package utils;
 
 import java.io.*;
 import java.util.*;
@@ -13,20 +13,24 @@ public class HexFileReader implements AutoCloseable {
     }
 
     /**
-     * Проверяет наличие следующего байта
-     * @return true если есть следующий непробельный байт
-     * @throws IOException если ридер закрыт
+     * Checks for the presence of the next byte
+     *
+     * @return true if there is a next non-space byte
+     * @throws IOException if the reader is closed
      */
+
     public boolean hasNext() throws IOException {
         return !closed && scanner.hasNext();
     }
 
     /**
-     * Читает указанное количество байтов
-     * @param count запрашиваемое количество байтов
-     * @return массив прочитанных байтов (может быть короче запрошенного)
-     * @throws IOException при ошибках чтения или невалидных данных
+     * Reads the specified number of bytes
+     *
+     * @param count the requested number of bytes
+     * @return array of read bytes
+     * @throws IOException on read errors or invalid data
      */
+
     public byte[] readBytes(int count) throws IOException {
         if (closed) throw new IOException("Reader closed");
 
