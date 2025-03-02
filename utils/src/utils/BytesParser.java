@@ -10,4 +10,12 @@ public final class BytesParser {
 
         return result;
     }
+
+    public static byte[] toBytes(long value, int byteCount) {
+        byte[] bytes = new byte[byteCount];
+        for (int i = 0; i < byteCount; i++) {
+            bytes[i] = (byte) ((value >> (8 * (byteCount - 1 - i))) & 0xFF);
+        }
+        return bytes;
+    }
 }
