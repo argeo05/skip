@@ -12,7 +12,7 @@ public abstract sealed class BinaryInstruction extends VMInstruction permits Add
     protected long rhs;
     protected long lhs;
 
-    public BinaryInstruction(Byte type, Context ctx) {
+    public BinaryInstruction(byte type, Context ctx) {
         super(type);
         this.ctx = ctx;
     }

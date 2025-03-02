@@ -7,6 +7,7 @@ import cvm.Context;
  * Instruction. Prints top stack value.
  *
  * @bytecode log
+ * @opcode 5
  * @stackArg value argument
  */
 

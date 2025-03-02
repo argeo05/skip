@@ -7,6 +7,7 @@ import cvm.Context;
  * Instruction. Pops last stack value and prints it.
  *
  * @bytecode debug
+ * @opcode 6
  */
 public final class Debug extends VMInstruction {
     Context ctx;

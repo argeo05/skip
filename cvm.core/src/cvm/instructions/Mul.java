@@ -7,6 +7,7 @@ import cvm.Context;
  * Instruction. Pops last stack value and pushes their product.
  *
  * @bytecode mul
+ * @opcode 3
  * @stackArg lhs first multiplier
  * @stackArg rhs second multiplier
  */

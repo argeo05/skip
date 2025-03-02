@@ -7,6 +7,7 @@ import cvm.Context;
  * Instruction. Pops two args and pushes their division.
  *
  * @bytecode div
+ * @opcode 4
  * @stackArg lhs dividend
  * @stackArg rhs divider
  */
