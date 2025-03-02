@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("mul")
 public class MulBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Mul(ctx);
+    VMInstruction construct(byte type) {
+        return new Mul(type, ctx);
     }
 
     @Override

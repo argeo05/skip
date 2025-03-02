@@ -12,8 +12,8 @@ import cvm.Context;
  */
 
 public final class Mul extends BinaryInstruction {
-    public Mul(Context ctx) {
-        super(ctx);
+    public Mul(byte type, Context ctx) {
+        super(type, ctx);
     }
 
     @Override

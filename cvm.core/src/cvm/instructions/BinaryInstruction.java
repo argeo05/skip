@@ -7,12 +7,13 @@ import cvm.Context;
  * <b>BinaryInstruction</b>
  * Class for implements binary instructions to Virtual Machine.
  */
-public abstract sealed class BinaryInstruction implements VMInstruction permits Add, Div, Mul, Sub {
+public abstract sealed class BinaryInstruction extends VMInstruction permits Add, Div, Mul, Sub {
     protected Context ctx;
     protected long rhs;
     protected long lhs;
 
-    public BinaryInstruction(Context ctx) {
+    public BinaryInstruction(Byte type, Context ctx) {
+        super(type);
         this.ctx = ctx;
     }
 

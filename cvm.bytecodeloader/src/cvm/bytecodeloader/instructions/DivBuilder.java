@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("div")
 public class DivBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Div(ctx);
+    VMInstruction construct(byte type) {
+        return new Div(type, ctx);
     }
 
     @Override

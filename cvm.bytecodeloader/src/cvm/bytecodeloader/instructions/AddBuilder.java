@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("add")
 public class AddBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Add(ctx);
+    VMInstruction construct(byte type) {
+        return new Add(type, ctx);
     }
 
     @Override

@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("sub")
 public class SubBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Sub(ctx);
+    VMInstruction construct(byte type) {
+        return new Sub(type, ctx);
     }
 
     @Override

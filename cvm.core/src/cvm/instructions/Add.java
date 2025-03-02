@@ -12,8 +12,8 @@ import cvm.Context;
  */
 
 public final class Add extends BinaryInstruction {
-    public Add(Context ctx) {
-        super(ctx);
+    public Add(byte type, Context ctx) {
+        super(type, ctx);
     }
 
     long calc() {

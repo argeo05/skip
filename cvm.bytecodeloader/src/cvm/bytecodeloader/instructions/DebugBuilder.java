@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("debug")
 public class DebugBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Debug(ctx);
+    VMInstruction construct(byte type) {
+        return new Debug(type, ctx);
     }
 
     @Override

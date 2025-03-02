@@ -44,7 +44,7 @@ public class ByteCodeLoader {
                                 res = resolve(instr[0])
                                         .setCtx(ctx)
                                         .setArgs(copyOfRange(instr, 1, instr.length))
-                                        .build();
+                                        .build((byte) 0);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }

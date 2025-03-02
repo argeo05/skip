@@ -12,8 +12,8 @@ import cvm.Context;
  */
 
 public final class Sub extends BinaryInstruction {
-    public Sub(Context ctx) {
-        super(ctx);
+    public Sub(byte type, Context ctx) {
+        super(type, ctx);
     }
 
     @Override

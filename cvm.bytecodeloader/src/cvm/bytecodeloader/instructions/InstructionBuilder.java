@@ -15,7 +15,7 @@ public abstract class InstructionBuilder {
     protected Context ctx;
     protected String[] args;
 
-    abstract VMInstruction construct();
+    abstract VMInstruction construct(byte type);
     abstract int getArgsCount();
 
     public InstructionBuilder setArgs(String... args) {
@@ -28,7 +28,7 @@ public abstract class InstructionBuilder {
         return this;
     }
 
-    public VMInstruction build() {
+    public VMInstruction build(byte type) {
         if (args.length != getArgsCount()) {
             throw new IllegalStateException(
                     "[" + this.getClass().getName() +  "] Invalid arg count: "
@@ -37,6 +37,6 @@ public abstract class InstructionBuilder {
         }
 
 
-        return construct();
+        return construct(type);
     }
 }

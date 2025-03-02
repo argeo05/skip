@@ -10,11 +10,12 @@ import cvm.Context;
  * @stackArg value argument
  */
 
-public final class Log implements VMInstruction {
+public final class Log extends VMInstruction {
     Context ctx;
     long value;
 
-    public Log(Context ctx) {
+    public Log(Byte type, Context ctx) {
+        super(type);
         this.ctx = ctx;
     }
 

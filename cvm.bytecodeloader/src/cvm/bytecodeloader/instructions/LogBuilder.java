@@ -14,8 +14,8 @@ import utils.InstrBuilder;
 @InstrBuilder("log")
 public class LogBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct() {
-        return new Log(ctx);
+    VMInstruction construct(byte type) {
+        return new Log(type, ctx);
     }
 
     @Override

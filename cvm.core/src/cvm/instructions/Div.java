@@ -12,8 +12,8 @@ import cvm.Context;
  */
 
 public final class Div extends BinaryInstruction {
-    public Div(Context ctx) {
-        super(ctx);
+    public Div(Byte type, Context ctx) {
+        super(type, ctx);
     }
 
     @Override

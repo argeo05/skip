@@ -8,11 +8,11 @@ import cvm.Context;
  *
  * @bytecode debug
  */
-public final class Debug implements VMInstruction {
+public final class Debug extends VMInstruction {
     Context ctx;
-    long value;
 
-    public Debug(Context ctx) {
+    public Debug(Byte type, Context ctx) {
+        super(type);
         this.ctx = ctx;
     }
 

@@ -19,8 +19,8 @@ public class LoadBuilder extends InstructionBuilder {
     }
 
     @Override
-    public VMInstruction construct() {
+    public VMInstruction construct(byte type) {
         long value = Long.parseLong(args[0]);
-        return new Load(value, ctx);
+        return new Load(type, value, ctx);
     }
 }

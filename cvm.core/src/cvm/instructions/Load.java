@@ -8,11 +8,12 @@ import cvm.Context;
  *
  * @bytecode ld
  */
-public final class Load implements VMInstruction {
+public final class Load extends VMInstruction {
     Context ctx;
     long value;
 
-    public Load(long value, Context ctx) {
+    public Load(byte type, long value, Context ctx) {
+        super(type);
         this.value = value;
         this.ctx = ctx;
     }
