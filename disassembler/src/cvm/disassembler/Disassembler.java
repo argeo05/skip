@@ -1,6 +1,8 @@
 package cvm.disassembler;
 
-import cvm.instructions.Commands;
+import cvm.instructions.Instructions;
+import utils.BytesParser;
+import utils.HexFileReader;
 
 import java.io.*;
 import java.util.Arrays;
@@ -17,7 +19,7 @@ public final class Disassembler {
                 throw new IOException("Invalid magic bytes");
             }
 
-            reader.readBytes(30); // skip header
+            reader.readBytes(28);
 
             writer.write("fun main\n");
 
@@ -25,7 +27,7 @@ public final class Disassembler {
                 int opcode = reader.readBytes(1)[0] & 0xFF;
                 int instrType = reader.readBytes(1)[0] & 0xFF;
 
-                Commands command = Commands.fromOpcode(opcode);
+                Instructions command = Instructions.fromOpcode(opcode);
                 if (command == null) {
                     throw new IOException("Unknown opcode: " + opcode);
                 }
@@ -34,7 +36,7 @@ public final class Disassembler {
 
                 if (instrType == 0 && (opcode == 0)) {
                     byte[] args = reader.readBytes(4);
-                    writer.write(" " + bytesToDecimal(args));
+                    writer.write(" " + BytesParser.toDeciminal(args));
                 }
 
                 writer.write("\n");
@@ -42,13 +44,6 @@ public final class Disassembler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static long bytesToDecimal(byte[] bytes) {
-        return ((bytes[0] & 0xFF) << 24) |
-                ((bytes[1] & 0xFF) << 16) |
-                ((bytes[2] & 0xFF) << 8) |
-                (bytes[3] & 0xFF);
     }
 
     public static void main(String[] args) {
