@@ -81,10 +81,37 @@ th, td {
 }
 
 th {
-    background-color: rgba(86, 46, 63, 0.577);
+    background-color: rgba(102, 3, 90, 0.5);
     font-weight: 600;
 }
 
 tr:nth-child(even) {
     background-color: rgba(243, 207, 239, 0.458);
+}
+
+.example {
+    background-color: rgba(143, 113, 164, 0.296); 
+    color: #f3e5f5; 
+    font-size: 0.9em;
+    border: 2px solid #9c27b0; 
+    padding: 20px;
+    border-radius: 10px; 
+    transition: 0.3s ease-in-out;
+}
+
+.example:hover {
+    background-color: #7b1fa236;
+    box-shadow: 0 6px 15px rgba(156, 39, 176, 0.7);
+}
+
+.example strong {
+    color: #380031c7; 
+    font-size: 1.0em;
+}
+
+.example pre {
+    color: #380031c7; 
+    padding: 0;
+    margin: 0;
+    font-size: 1.0em;
 }

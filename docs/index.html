@@ -38,7 +38,8 @@
                 </li>
                 <li>
                     <strong>Header</strong><br>
-                    File always starts with header. It has MAGIC code, Version Info, Constant pool size and reversed
+                    Block in the top of file. File always starts with header. It has MAGIC code, Version Info, Constant
+                    pool size and reserved
                     bytes (for future features).
                 </li>
                 <li>
@@ -91,6 +92,100 @@
                     </tr>
                 </tbody>
             </table>
+        </section>
+
+        <section id="instructions">
+            <h2 class="section-title">Instructions info</h2>
+            <p>Every instrusction has its own set of arguments conditions.
+                So the first byte of instrusction is its opcode.
+                The Second is type of instruction.
+                Next N bytes are the arguments, which is provided to that type of instruction.
+            </p>
+            <div class="example">
+                <strong>Example</strong>
+                <pre>
+Load for integer:
+Opcode:      00 (load)
+Type:        00 (immediate value)
+Arguments:   4-byte integer
+            
+Load for Constant(it is only example):
+Opcode:      00 (load)
+Type:        01 (constant reference)
+Arguments:   2-byte reference
+                </pre>
+            </div>
+            <h4>Table of commands for type 00:</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Opcode</th>
+                        <th>Instruction</th>
+                        <th>Description</th>
+                        <th>Argument Count for</th>
+                        <th>Argument Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0</td>
+                        <td>ld</td>
+                        <td>Load value to stack</td>
+                        <td>1</td>
+                        <td>4 bytes integer</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>add</td>
+                        <td>Addition</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>sub</td>
+                        <td>Subtraction</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>mul</td>
+                        <td>Multiplication</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>div</td>
+                        <td>Division</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>log</td>
+                        <td>Log value</td>
+                        <td>1</td>
+                        <td>4 bytes integer</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>debug</td>
+                        <td>Debug instruction</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>7-127</td>
+                        <td>-</td>
+                        <td>Reserved for additional instructions</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </section>
     </main>
 </body>
