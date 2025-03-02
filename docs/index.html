@@ -88,7 +88,7 @@
                     <tr>
                         <td>12</td>
                         <td>20</td>
-                        <td>Reserved for future use</td>
+                        <td>Reserved for future use. There should only be zero bytes.</td>
                     </tr>
                 </tbody>
             </table>
@@ -96,10 +96,9 @@
 
         <section id="instructions">
             <h2 class="section-title">Instructions info</h2>
-            <p>Every instrusction has its own set of arguments conditions.
-                So the first byte of instrusction is its opcode.
-                The Second is type of instruction.
-                Next N bytes are the arguments, which is provided to that type of instruction.
+            <p>Each instruction has its own set of argument conditions. Thus, the first byte of an instruction is its
+                opcode. The second is the type of instruction. The next N bytes are the arguments needed by this type of
+                instruction. If istruction has zero arguments in type 00, it must have zero arguments in each type.
             </p>
             <div class="example">
                 <strong>Example</strong>
