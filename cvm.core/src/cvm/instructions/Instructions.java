@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Enumerates the available commands with their corresponding opcodes.
  */
-public enum Commands {
+public enum Instructions {
     LD(0),
     ADD(1),
     SUB(2),
@@ -16,15 +16,15 @@ public enum Commands {
     DEBUG(6);
 
     private final int opcode;
-    private static final Map<Integer, Commands> opcodeToCommandMap = new HashMap<>();
+    private static final Map<Integer, Instructions> opcodeToCommandMap = new HashMap<>();
 
     static {
-        for (Commands command : Commands.values()) {
+        for (Instructions command : Instructions.values()) {
             opcodeToCommandMap.put(command.opcode, command);
         }
     }
 
-    Commands(int opcode) {
+    Instructions(int opcode) {
         this.opcode = opcode;
     }
 
@@ -38,7 +38,7 @@ public enum Commands {
      * @param opcode The opcode to look up.
      * @return The enum constant with the specified opcode, or null if no such constant exists.
      */
-    public static Commands fromOpcode(int opcode) {
+    public static Instructions fromOpcode(int opcode) {
         return opcodeToCommandMap.get(opcode);
     }
 }
