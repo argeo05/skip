@@ -8,18 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main {
-    static String codeDebug = """
-            ; Comment
-            fun main
-                ld 7
-                ld 5
-                add
-                log""";
-
     public static void main(String[] args) {
         try {
             if (args.length == 0) {
-                startVM(codeDebug);
+                startVM("cvm.bytecodeloader/resources/input.txt");
             } else {
                 String fileContent = Files.readString(Paths.get(args[0]));
                 startVM(fileContent);
@@ -29,9 +21,9 @@ public class Main {
         }
     }
 
-    private static void startVM(String code) {
+    private static void startVM(String path) {
         Context ctx = new Context();
-        new ByteCodeLoader().setCode(code).setCtx(ctx).parse();
+        new ByteCodeLoader().setInputPath(path).setCtx(ctx).parse();
         ctx.start();
     }
 }

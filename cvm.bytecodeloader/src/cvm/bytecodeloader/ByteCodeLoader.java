@@ -2,18 +2,23 @@ package cvm.bytecodeloader;
 
 import cvm.Context;
 import cvm.Function;
+import cvm.instructions.Instructions;
 import cvm.instructions.VMInstruction;
+import utils.BytesParser;
+import utils.HexFileReader;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
-import static java.util.Arrays.copyOfRange;
 
 public class ByteCodeLoader {
-    String code;
     private Function curr = null;
-    Context ctx;
+    private String inputPath;
+    private Context ctx;
 
-    public ByteCodeLoader setCode(String code) {
-        this.code = code;
+    public ByteCodeLoader setInputPath(String inputPath) {
+        this.inputPath = inputPath;
         return this;
     }
 
@@ -23,36 +28,52 @@ public class ByteCodeLoader {
     }
 
     public void parse() {
-        code.lines()
-                .map(String::trim)
-                .filter(line -> !line.isEmpty())
-                .map(s -> s.split(" "))
-                .forEach(instr -> {
-                    switch (instr[0]) {
-                        case "fun" -> {
-                            if (curr != null) {
-                                ctx.addFun(curr);
-                            }
+        try (HexFileReader reader = new HexFileReader(inputPath)) {
 
-                            String name = instr[1];
-                            curr = new Function(name);
-                        }
-                        case ";" -> { /* Comment */ }
-                        default -> {
-                            VMInstruction res = null;
-                            try {
-                                res = resolve(instr[0])
-                                        .setCtx(ctx)
-                                        .setArgs(copyOfRange(instr, 1, instr.length))
-                                        .build((byte) 0);
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                            curr.addInstruction(res);
-                        }
-                    }
-                });
+            byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65};
+            byte[] magicBytes = reader.readBytes(4);
 
-        ctx.addFun(curr);
+            if (!Arrays.equals(magicBytes, expectedMagic)) {
+                throw new IOException("Invalid magic bytes");
+            }
+
+            reader.readBytes(28);
+
+            if (curr != null) {
+                ctx.addFun(curr);
+            }
+            curr = new Function("main");
+
+            while (reader.hasNext()) {
+                int opcode = reader.readBytes(1)[0] & 0xFF;
+                int instrType = reader.readBytes(1)[0] & 0xFF;
+
+                String instruction = Instructions.fromOpcode(opcode).name().toLowerCase();
+
+                byte[] byteArgs;
+                String[] args = null;
+                if (instrType == 0 && (opcode == 0)) {
+                    byteArgs = reader.readBytes(4);
+                    args = new String[]{String.valueOf(BytesParser.toDeciminal(byteArgs))};
+                } else {
+                    args = new String[0];
+                }
+
+                VMInstruction res = null;
+                try {
+                    res = resolve(instruction)
+                            .setCtx(ctx)
+                            .setArgs(args)
+                            .build((byte) 0);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                curr.addInstruction(res);
+            }
+
+            ctx.addFun(curr);
+        } catch (Exception e) {
+            throw new RuntimeException("Error parsing binary bytecode: " + e.getMessage(), e);
+        }
     }
 }
