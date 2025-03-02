@@ -12,7 +12,7 @@ test:
   script:
     - tests/test.sh
 
-gitlabPages:
+pages:
   stage: DeployDocs
   script:
     - mkdir -p public
