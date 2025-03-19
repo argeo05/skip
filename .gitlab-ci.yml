@@ -1,0 +1,22 @@
+default:
+  tags:
+    - docker
+  image: gradle:jdk21-noble
+
+stages:
+  - Testing
+  - DeployDocs
+
+test:
+  stage: Testing
+  script:
+    - tests/test.sh
+
+pages:
+  stage: DeployDocs
+  script:
+    - mkdir -p public
+    - cp -r docs/* public/
+  artifacts:
+    paths:
+      - public
