@@ -31,7 +31,7 @@ public class ByteCodeLoader {
         try (HexFileReader reader = new HexFileReader(inputPath)) {
 
             byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65};
-            byte[] magicBytes = reader.readBytes(4);
+            byte[] magicBytes = reader.readBytes(6);
 
             if (!Arrays.equals(magicBytes, expectedMagic)) {
                 throw new IOException("Invalid magic bytes");
@@ -43,6 +43,7 @@ public class ByteCodeLoader {
                 ctx.addFun(curr);
             }
             curr = new Function("main");
+            
 
             while (reader.hasNext()) {
                 int opcode = reader.readBytes(1)[0] & 0xFF;

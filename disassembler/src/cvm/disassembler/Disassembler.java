@@ -19,7 +19,7 @@ public final class Disassembler {
                 throw new IOException("Invalid magic bytes");
             }
 
-            reader.readBytes(28);
+            reader.readBytes(30);
 
             writer.write("fun main\n");
 

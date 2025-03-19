@@ -25,7 +25,7 @@ public class Compiler {
 
     private void writeHeader() {
         appendHexBytes(new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65});
-        appendHexBytes(new byte[]{0x00, 0x01, 0x00, 0x00});
+        appendHexBytes(new byte[]{0x00, 0x01, 0x00, 0x00, 0x00, 0x00});
         appendHexBytes(new byte[4]);
         appendHexBytes(new byte[20]);
     }
