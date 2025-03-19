@@ -5,11 +5,10 @@ import cvm.Function;
 import cvm.instructions.Instructions;
 import cvm.instructions.VMInstruction;
 import utils.BytesParser;
-import utils.HexFileReader;
-
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-
 import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
 
 public class ByteCodeLoader {
@@ -28,50 +27,38 @@ public class ByteCodeLoader {
     }
 
     public void parse() {
-        try (HexFileReader reader = new HexFileReader(inputPath)) {
-
-            byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65};
-            byte[] magicBytes = reader.readBytes(6);
-
+        try (DataInputStream dis = new DataInputStream(new FileInputStream(inputPath))) {
+            byte[] expectedMagic = new byte[]{(byte)0x83, 0x79, (byte)0x83, 0x65};
+            byte[] magicBytes = new byte[4];
+            dis.readFully(magicBytes);
             if (!Arrays.equals(magicBytes, expectedMagic)) {
                 throw new IOException("Invalid magic bytes");
             }
-
-            reader.readBytes(28);
-
+            dis.skipBytes(30);
             if (curr != null) {
                 ctx.addFun(curr);
             }
             curr = new Function("main");
-            
-
-            while (reader.hasNext()) {
-                int opcode = reader.readBytes(1)[0] & 0xFF;
-                int instrType = reader.readBytes(1)[0] & 0xFF;
-
+            while (dis.available() > 0) {
+                int opcode = dis.readUnsignedByte();
+                int instrType = dis.readUnsignedByte();
                 String instruction = Instructions.fromOpcode(opcode).name().toLowerCase();
-
-                byte[] byteArgs;
-                String[] args = null;
-                if (instrType == 0 && (opcode == 0)) {
-                    byteArgs = reader.readBytes(4);
-                    args = new String[]{String.valueOf(BytesParser.toDeciminal(byteArgs))};
+                String[] args;
+                if (instrType == 0 && opcode == Instructions.LD.getOpcode()) {
+                    byte[] argBytes = new byte[4];
+                    dis.readFully(argBytes);
+                    args = new String[]{String.valueOf(BytesParser.toDeciminal(argBytes))};
                 } else {
                     args = new String[0];
                 }
-
-                VMInstruction res = null;
+                VMInstruction res;
                 try {
-                    res = resolve(instruction)
-                            .setCtx(ctx)
-                            .setArgs(args)
-                            .build((byte) 0);
+                    res = resolve(instruction).setCtx(ctx).setArgs(args).build((byte)0);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 curr.addInstruction(res);
             }
-
             ctx.addFun(curr);
         } catch (Exception e) {
             throw new RuntimeException("Error parsing binary bytecode: " + e.getMessage(), e);
