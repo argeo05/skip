@@ -22,7 +22,7 @@
 
             <div class="alert">
                 <strong>Note:</strong> This specification applies to SOSA (Simple Optimized Strict Architecture) version
-                1.0. Future versions will use backward compatibility principles.
+                1.0.0. Future versions will use backward compatibility principles.
             </div>
         </section>
 
@@ -82,11 +82,16 @@
                     </tr>
                     <tr>
                         <td>8</td>
+                        <td>2</td>
+                        <td>Patch version</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
                         <td>4</td>
                         <td>Constant pool size in bytes</td>
                     </tr>
                     <tr>
-                        <td>12</td>
+                        <td>14</td>
                         <td>20</td>
                         <td>Reserved for future use. There should only be zero bytes.</td>
                     </tr>
@@ -186,12 +191,38 @@ Arguments:   2-byte reference
             </table>
         </section>
 
-        <section>
-            <h2 class="section-title">[WIP] Functions</h2>
-            <p><strong>Note!</strong> Functions realizations in progress, so you can use only function main.</p>
-            <p>Idea: If byte is 128 in deciminal, so next bytes represents fucntion. First byte is name length. Next N
-                bytes are name in ASCII.</p>
-            <p>Now: bytecode has no fucntions.</p>
+        <section id="enhancements">
+            <h2>Enhancements for Function Calls and Data Management</h2>
+
+            <h3>Stack Frames</h3>
+            <p>
+                To support function calls, the virtual machine now uses a stack frame mechanism. Each frame includes:
+            </p>
+            <ul>
+                <li><strong>Return Address:</strong> The instruction pointer location to return to after function execution.</li>
+                <li><strong>Local Variables Array Pointer:</strong> A reference to the array of local variables allocated for the function call.</li>
+                <li><strong>Saved Context:</strong> Optionally, registers or additional execution context required to resume the caller's state.</li>
+            </ul>
+
+            <h3>Local Variables Array</h3>
+            <p>
+                Every function call allocates a dedicated array for local variables. This array is initialized at function entry and is used to store:
+            </p>
+            <ul>
+                <li>Function parameters</li>
+                <li>Temporary values during computation</li>
+                <li>Other intermediate results</li>
+            </ul>
+
+            <h3>Constant Pool</h3>
+            <p>
+                The virtual machine also employs a constant pool to manage immutable values and literals. The constant pool is accessed during bytecode execution to:
+            </p>
+            <ul>
+                <li>Retrieve literal values</li>
+                <li>Reference method and class constants</li>
+                <li>Optimize memory usage by reusing common constants</li>
+            </ul>
         </section>
     </main>
 </body>
