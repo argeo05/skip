@@ -1,11 +1,14 @@
 #!/bin/bash
-javac -d out/utils utils/src/module-info.java utils/src/utils/*.java
-javac --module-path out -d out/cvm.core cvm.core/src/module-info.java cvm.core/src/cvm/*.java cvm.core/src/cvm/instructions/*.java
-javac --module-path out -d out/cvm.bytecodeloader cvm.bytecodeloader/src/module-info.java cvm.bytecodeloader/src/cvm/bytecodeloader/*.java cvm.bytecodeloader/src/cvm/bytecodeloader/instructions/*.java
-javac --module-path out -d out/App App/src/module-info.java App/src/app/*.java
+javac -d out/test --module-source-path src -m utils,cvm.core,cvm.bytecodeloader,App,disassembler,compiler
+
+module_path="out/test"
+res_path="tests/resources"
+
+java --module-path $module_path -m compiler/cvm.compiler.Compiler "$res_path/inputcomplier.txt" "$res_path/outputcomplier.sosa"
+java --module-path $module_path -m disassembler/cvm.disassembler.Disassembler "$res_path/outputcomplier.sosa" "$res_path/outputdisassembler.txt"
+output=$(java --module-path $module_path -m App/app.Main "$res_path/outputcomplier.sosa")
 
 expected_value="12"
-output=$(java --module-path out -m App/app.Main)
 
 if [ "$output" == "$expected_value" ];
 then
