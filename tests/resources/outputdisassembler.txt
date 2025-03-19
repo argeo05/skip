@@ -1,1 +1,7 @@
 fun main
+    LD 12
+    LD 12
+    ADD
+    LD 2
+    DIV
+    LOG

@@ -1,2 +1,7 @@
-Main
+fun main
     ld 12
+    ld 12
+    add
+    ld 2
+    div
+    log
