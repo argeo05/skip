@@ -97,6 +97,11 @@
                     </tr>
                 </tbody>
             </table>
+            <p>
+                After the header (which totals 34 bytes), the constant pool occupies the next
+                <em>Constant pool size</em> bytes in the file. The code section (instructions) starts
+                immediately after the constant pool ends.
+            </p>
         </section>
 
         <section id="instructions">
@@ -191,38 +196,68 @@ Arguments:   2-byte reference
             </table>
         </section>
 
+        <section id="constant-pool">
+            <h2 class="section-title">Constant Pool Layout</h2>
+            <p>
+                The constant pool immediately follows the 34-byte header. Its size is specified
+                by the field at position 10 in the header. The constant pool is used for:
+            </p>
+            <ul>
+                <li>Storing immutable values (e.g., string literals, numeric constants)</li>
+                <li>Referencing methods, classes, or other symbolic data</li>
+            </ul>
+        </section>
+
         <section id="enhancements">
-            <h2>Enhancements for Function Calls and Data Management</h2>
+            <h2 class="section-title">Enhancements for Function Calls and Data Management</h2>
 
             <h3>Stack Frames</h3>
             <p>
-                To support function calls, the virtual machine now uses a stack frame mechanism. Each frame includes:
+                To support function calls, the virtual machine uses stack frames. Each function call pushes
+                a new stack frame onto the call stack. A frame typically includes:
             </p>
             <ul>
-                <li><strong>Return Address:</strong> The instruction pointer location to return to after function execution.</li>
-                <li><strong>Local Variables Array Pointer:</strong> A reference to the array of local variables allocated for the function call.</li>
-                <li><strong>Saved Context:</strong> Optionally, registers or additional execution context required to resume the caller's state.</li>
+                <li>
+                    <strong>Return Address:</strong> The instruction pointer location to return to once the
+                    function completes.
+                </li>
+                <li>
+                    <strong>Local Variables Array Pointer:</strong> A reference to the array of local variables
+                    allocated for this function call.
+                </li>
+                <li>
+                    <strong>Saved Context:</strong> Any registers or additional execution context needed to
+                    restore the caller’s state.
+                </li>
             </ul>
+            <p>
+                These frames are allocated at runtime; the bytecode file itself does not store them. However,
+                they are critical for correctly interpreting function call boundaries during execution.
+            </p>
 
             <h3>Local Variables Array</h3>
             <p>
-                Every function call allocates a dedicated array for local variables. This array is initialized at function entry and is used to store:
+                Each stack frame has an associated local variables array, which is allocated upon function
+                entry. This array contains:
             </p>
             <ul>
-                <li>Function parameters</li>
-                <li>Temporary values during computation</li>
-                <li>Other intermediate results</li>
+                <li>Function parameters, as passed by the caller</li>
+                <li>Temporary values or intermediate results during execution</li>
+                <li>Possible space for additional bookkeeping needed by the function</li>
             </ul>
-
-            <h3>Constant Pool</h3>
             <p>
-                The virtual machine also employs a constant pool to manage immutable values and literals. The constant pool is accessed during bytecode execution to:
+                Instructions that reference local variables will include an index (e.g.,
+                <code>LV index</code>) to read or write a particular slot in this array. The size of the
+                local variables array is either declared in the function metadata or allocated dynamically based
+                on the maximum number of local variables required.
             </p>
-            <ul>
-                <li>Retrieve literal values</li>
-                <li>Reference method and class constants</li>
-                <li>Optimize memory usage by reusing common constants</li>
-            </ul>
+
+            <h3>Constant Pool (Runtime Access)</h3>
+            <p>
+                During runtime, certain instructions (such as <code>load</code> with a type specifying “constant
+                reference”) will look up literals or symbolic references in the constant pool by index or offset.
+                This allows the bytecode to keep code and data separate and reuse constants efficiently.
+            </p>
         </section>
     </main>
 </body>

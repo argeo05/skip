@@ -115,3 +115,34 @@ tr:nth-child(even) {
     margin: 0;
     font-size: 1.0em;
 }
+
+h3 {
+    color: #8d60a0;
+    border-bottom: 1px solid rgba(142, 68, 173, 0.3);
+    padding-bottom: 8px;
+    margin: 25px 0 15px;
+    font-size: 1.2em;
+}
+
+ul {
+    padding-left: 30px;
+    margin: 15px 0;
+    list-style-type: none;
+}
+
+li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+li:before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: #280537;
+    font-weight: bold;
+    margin-right: 10px;
+}
