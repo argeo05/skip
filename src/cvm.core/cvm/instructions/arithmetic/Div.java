@@ -19,7 +19,7 @@ public final class Div extends BinaryInstruction {
     }
 
     @Override
-    long calc() {
+    public long calc() {
         return lhs / rhs;
     }
 }

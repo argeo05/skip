@@ -1,6 +1,6 @@
 package cvm.instructions;
 
-import cvm.instructions.arithmetic.Log;
+import cvm.instructions.special.Log;
 import cvm.instructions.special.*;
 
 /**

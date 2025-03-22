@@ -21,7 +21,7 @@ public abstract sealed class BinaryInstruction extends VMInstruction permits Add
         this.ctx = ctx;
     }
 
-    abstract long calc();
+    protected abstract long calc();
 
     @Override
     public void popArgs() {

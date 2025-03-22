@@ -20,7 +20,7 @@ public final class Add extends BinaryInstruction {
         super(type, ctx);
     }
 
-    long calc() {
+    public long calc() {
         return lhs + rhs;
     }
 }

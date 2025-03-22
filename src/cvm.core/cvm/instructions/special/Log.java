@@ -1,4 +1,4 @@
-package cvm.instructions.arithmetic;
+package cvm.instructions.special;
 
 import cvm.Context;
 import cvm.instructions.VMInstruction;

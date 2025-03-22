@@ -19,7 +19,7 @@ public final class Sub extends BinaryInstruction {
     }
 
     @Override
-    long calc() {
+    public long calc() {
         return lhs - rhs;
     }
 }
