@@ -104,6 +104,49 @@
             </p>
         </section>
 
+        <section id="constant-pool">
+            <h2 class="section-title">Constant Pool Layout</h2>
+            <p>
+              The constant pool immediately follows the 34-byte header. Its size is specified in the header at position 8.
+              The constant pool is used to store immutable values and symbolic references such as string literals, numeric constants,
+              and other data.
+            </p>
+            <p>
+              Each entry in the constant pool starts with a 1-byte tag that identifies the type of constant. This tag determines
+              the number of additional bytes that should be read to obtain the complete constant value.
+            </p>
+            <h3>Constant Pool Entry Types</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tag</th>
+                  <th>Type</th>
+                  <th>Size</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>0x01</td>
+                  <td>Integer</td>
+                  <td>4 bytes</td>
+                  <td>Represents a 32-bit integer in big-endian format.</td>
+                </tr>
+                <tr>
+                  <td>0x02</td>
+                  <td>Long</td>
+                  <td>
+                    8 bytes
+                  </td>
+                  <td>
+                    Represents a 64-bit integer in big-endian format.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          
+
         <section id="instructions">
             <h2 class="section-title">Instructions info</h2>
             <p>Each instruction has its own set of argument conditions. Thus, the first byte of an instruction is its
@@ -194,18 +237,28 @@ Arguments:   2-byte reference
                     </tr>
                 </tbody>
             </table>
-        </section>
 
-        <section id="constant-pool">
-            <h2 class="section-title">Constant Pool Layout</h2>
-            <p>
-                The constant pool immediately follows the 34-byte header. Its size is specified
-                by the field at position 10 in the header. The constant pool is used for:
-            </p>
-            <ul>
-                <li>Storing immutable values (e.g., string literals, numeric constants)</li>
-                <li>Referencing methods, classes, or other symbolic data</li>
-            </ul>
+            <h4>Table of Instructions for non-zero type:</h4>
+            <table>
+                <thead>
+                    <tr>
+                    <th>Opcode</th>
+                    <th>Instruction</th>
+                    <th>Description</th>
+                    <th>Argument Count</th>
+                    <th>Argument Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td>0</td>
+                    <td>ld</td>
+                    <td>Load constant from the constant pool</td>
+                    <td>1</td>
+                    <td>4-byte constant pool reference</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
         <section id="enhancements">
