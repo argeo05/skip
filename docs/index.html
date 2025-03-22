@@ -95,6 +95,21 @@
                         <td>20</td>
                         <td>Reserved for future use. There should only be zero bytes.</td>
                     </tr>
+                    <tr>
+                        <td><code>GET</code></td>
+                        <td>7</td>
+                        <td>Pushes a local variable’s value from an index <code>ind</code> onto the stack.</td>
+                    </tr>
+                    <tr>
+                        <td><code>PUT</code></td>
+                        <td>8</td>
+                        <td>Pops a value from the stack and stores it into a local variable at index <code>ind</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>INVOKE</code></td>
+                        <td>9</td>
+                        <td>Invokes a function by its identifier (popping the required number of arguments from the stack beforehand).</td>
+                    </tr>
                 </tbody>
             </table>
             <p>
@@ -142,6 +157,19 @@
                     Represents a 64-bit integer in big-endian format.
                   </td>
                 </tr>
+                <tr>
+                    <td>0x03</td>
+                    <td>Function</td>
+                    <td>
+                      3 + N bytes
+                    </td>
+                    <td>
+                      First byte is length of fucntion name.<br>
+                      Second byte is amount of args.<br>
+                      Third byte is amout of local variables.<br>
+                      Next N bytes are fucntion name in ACSII.
+                    </td>
+                  </tr>
               </tbody>
             </table>
           </section>
@@ -261,58 +289,43 @@ Arguments:   2-byte reference
             </table>
         </section>
 
-        <section id="enhancements">
-            <h2 class="section-title">Enhancements for Function Calls and Data Management</h2>
-
-            <h3>Stack Frames</h3>
+        <section>
+            <h2 class="section-title">Function Execution</h2>
             <p>
-                To support function calls, the virtual machine uses stack frames. Each function call pushes
-                a new stack frame onto the call stack. A frame typically includes:
+            The mechanism for calling and executing functions works as follows:
             </p>
-            <ul>
-                <li>
-                    <strong>Return Address:</strong> The instruction pointer location to return to once the
-                    function completes.
-                </li>
-                <li>
-                    <strong>Local Variables Array Pointer:</strong> A reference to the array of local variables
-                    allocated for this function call.
-                </li>
-                <li>
-                    <strong>Saved Context:</strong> Any registers or additional execution context needed to
-                    restore the caller’s state.
-                </li>
-            </ul>
-            <p>
-                These frames are allocated at runtime; the bytecode file itself does not store them. However,
-                they are critical for correctly interpreting function call boundaries during execution.
-            </p>
-
-            <h3>Local Variables Array</h3>
-            <p>
-                Each stack frame has an associated local variables array, which is allocated upon function
-                entry. This array contains:
-            </p>
-            <ul>
-                <li>Function parameters, as passed by the caller</li>
-                <li>Temporary values or intermediate results during execution</li>
-                <li>Possible space for additional bookkeeping needed by the function</li>
-            </ul>
-            <p>
-                Instructions that reference local variables will include an index (e.g.,
-                <code>LV index</code>) to read or write a particular slot in this array. The size of the
-                local variables array is either declared in the function metadata or allocated dynamically based
-                on the maximum number of local variables required.
-            </p>
-
-            <h3>Constant Pool (Runtime Access)</h3>
-            <p>
-                During runtime, certain instructions (such as <code>load</code> with a type specifying “constant
-                reference”) will look up literals or symbolic references in the constant pool by index or offset.
-                This allows the bytecode to keep code and data separate and reuse constants efficiently.
-            </p>
+            <ol>
+            <li>
+                <strong>Argument Passing:</strong>
+                <p>
+                Before a function is called, the caller pushes all the necessary argument values onto the stack in the order expected by the function.
+                </p>
+            </li>
+            <li>
+                <strong>Function Call:</strong>
+                <p>
+                The invoke instruction contains a 4-byte value that references the function (an index in the constant pool). When the instruction is executed, the virtual machine pops the required number of arguments from the stack (in reverse order so that the first argument ends up at position 0) and proceeds to create a new stack frame.
+                </p>
+            </li>
+            <li>
+                <strong>Creating a Stack Frame:</strong>
+                <p>
+                Based on the function header, the virtual machine allocates a new stack frame. A fixed-size array for local variables is created using the <em>varc</em> value from the function header. The argument values are stored in the first slots of this array, and the remaining slots are initialized to default values.
+                </p>
+            </li>
+            <li>
+                <strong>Executing Function Instructions:</strong>
+                <p>
+                The function is executed by processing its instructions sequentially. Instructions such as <code>PUT</code> and <code>GET</code> access the slots in the local variable array, while arithmetic and other operations use the stack.
+                </p>
+            </li>
+            <li>
+                <strong>Function Termination:</strong>
+                <p>
+                After all instructions in the function have been executed, the stack frame removes. Control then returns to the caller.
+                </p>
+            </li>
+            </ol>
         </section>
-    </main>
-</body>
-
+    </body>
 </html>

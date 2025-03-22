@@ -13,7 +13,10 @@ public enum Instructions {
     MUL(3),
     DIV(4),
     LOG(5),
-    DEBUG(6);
+    DEBUG(6),
+    GET(7),
+    PUT(8),
+    INVOKE(9);
 
     private final int opcode;
     private static final Map<Integer, Instructions> opcodeToCommandMap = new HashMap<>();
