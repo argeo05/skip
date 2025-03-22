@@ -36,7 +36,6 @@ public abstract class InstructionBuilder {
             );
         }
 
-
         return construct(type);
     }
 }
