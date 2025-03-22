@@ -1,6 +1,7 @@
-package cvm.instructions;
+package cvm.instructions.arithmetic;
 
 import cvm.Context;
+import cvm.instructions.VMInstruction;
 
 /**
  * <b>Log</b>

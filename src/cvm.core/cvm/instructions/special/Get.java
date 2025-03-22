@@ -1,6 +1,7 @@
-package cvm.instructions;
+package cvm.instructions.special;
 
 import cvm.Context;
+import cvm.instructions.VMInstruction;
 
 public final class Get extends VMInstruction {
     Context ctx;

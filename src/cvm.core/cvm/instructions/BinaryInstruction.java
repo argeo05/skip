@@ -2,6 +2,10 @@
 package cvm.instructions;
 
 import cvm.Context;
+import cvm.instructions.arithmetic.Add;
+import cvm.instructions.arithmetic.Div;
+import cvm.instructions.arithmetic.Mul;
+import cvm.instructions.arithmetic.Sub;
 
 /**
  * <b>BinaryInstruction</b>

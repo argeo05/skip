@@ -1,6 +1,7 @@
-package cvm.instructions;
+package cvm.instructions.special;
 
 import cvm.Context;
+import cvm.instructions.VMInstruction;
 
 /**
  * <b>Debug</b>

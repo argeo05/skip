@@ -1,6 +1,6 @@
 package cvm.bytecodeloader.instructions;
 
-import cvm.instructions.Add;
+import cvm.instructions.arithmetic.Add;
 import cvm.instructions.VMInstruction;
 import utils.InstrBuilder;
 
