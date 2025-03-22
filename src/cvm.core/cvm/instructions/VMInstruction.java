@@ -4,18 +4,18 @@ package cvm.instructions;
  * <b>VMInstruction</b>
  * Based interface for instuctions.
  */
-public sealed abstract class VMInstruction permits BinaryInstruction, Debug, Load, Log {
+public sealed abstract class VMInstruction permits BinaryInstruction, Debug, Get, Invoke, Load, Log, Put {
     private Byte type;
 
     public VMInstruction(Byte type) {
         this.type = type;
     }
 
-    abstract void popArgs();
+    protected abstract void popArgs();
 
-    abstract void run();
+    protected abstract void run();
 
-    public void exec() {
+    public void invoke() {
         popArgs();
         run();
     }
