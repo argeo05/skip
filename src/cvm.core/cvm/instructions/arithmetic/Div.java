@@ -1,6 +1,7 @@
 package cvm.instructions.arithmetic;
 
 import cvm.Context;
+import cvm.exceptions.DivisionByZeroException;
 import cvm.instructions.BinaryInstruction;
 
 /**
@@ -20,6 +21,9 @@ public final class Div extends BinaryInstruction {
 
     @Override
     public long calc() {
+        if (rhs == 0) {
+            throw new DivisionByZeroException();
+        }
         return lhs / rhs;
     }
 }
