@@ -1,6 +1,8 @@
 package cvm;
 
-import cvm.exceptions;
+import cvm.exceptions.EmptyOperandStackException;
+import cvm.exceptions.DivisionByZeroException;
+
 
 import java.util.HashMap;
 import java.util.Map;
