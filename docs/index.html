@@ -11,7 +11,7 @@
 <body>
 
     <header>
-        <h1>SOSA Binary Bytecode Specification <span class="version-badge">v1.0</span></h1>
+        <h1>SOSA Binary Bytecode Specification <span class="version-badge">v1.1.0</span></h1>
         <p>Official documentation for the Simple Optimized Strict Architecture binary bytecode format</p>
     </header>
 
@@ -94,21 +94,6 @@
                         <td>14</td>
                         <td>20</td>
                         <td>Reserved for future use. There should only be zero bytes.</td>
-                    </tr>
-                    <tr>
-                        <td><code>GET</code></td>
-                        <td>7</td>
-                        <td>Pushes a local variable’s value from an index <code>ind</code> onto the stack.</td>
-                    </tr>
-                    <tr>
-                        <td><code>PUT</code></td>
-                        <td>8</td>
-                        <td>Pops a value from the stack and stores it into a local variable at index <code>ind</code>.</td>
-                    </tr>
-                    <tr>
-                        <td><code>INVOKE</code></td>
-                        <td>9</td>
-                        <td>Invokes a function by its identifier (popping the required number of arguments from the stack beforehand).</td>
                     </tr>
                 </tbody>
             </table>
@@ -263,6 +248,21 @@ Arguments:   2-byte reference
                         <td>-</td>
                         <td>-</td>
                     </tr>
+                    <tr>
+                        <td><code>GET</code></td>
+                        <td>7</td>
+                        <td>Pushes a local variable’s value from an index <code>ind</code> onto the stack.</td>
+                    </tr>
+                    <tr>
+                        <td><code>PUT</code></td>
+                        <td>8</td>
+                        <td>Pops a value from the stack and stores it into a local variable at index <code>ind</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><code>INVOKE</code></td>
+                        <td>9</td>
+                        <td>Invokes a function by its identifier (popping the required number of arguments from the stack beforehand).</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -329,3 +329,4 @@ Arguments:   2-byte reference
         </section>
     </body>
 </html>
+</main>
