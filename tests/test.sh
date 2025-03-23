@@ -1,5 +1,5 @@
 #!/bin/bash
-javac -d out/test --module-source-path src -m utils,cvm.core,cvm.bytecodeloader,App,disassembler,compiler
+javac -d out/test --module-source-path src -m utils,cvm.core,cvm.bytecodeloader,cvm.exceptions,App,disassembler,compiler
 
 module_path="out/test"
 res_path="tests/resources"

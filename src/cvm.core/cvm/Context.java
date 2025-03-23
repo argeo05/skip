@@ -1,6 +1,6 @@
 package cvm;
 
-import cvm.exceptions.EmptyOperandStackException;
+import cvm.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,18 +35,12 @@ public record Context(
         try {
             stack.peek().exec();
             delFrame();
-        } catch (EmptyOperandStackException e) {
-            var currException = e;
-
-            do {
+        } catch (EmptyOperandStackException | DivisionByZeroException e) {
+            while (!stack.isEmpty()) {
                 delFrame();
+            }
 
-                if (!stack.isEmpty()) {
-                    currException = new EmptyOperandStackException(currException, stack.peek());
-                }
-            } while (!stack.isEmpty());
-
-            throw new RuntimeException(currException);
+            throw new RuntimeException("Execution terminated: " + e.getMessage(), e);
         }
     }
 
