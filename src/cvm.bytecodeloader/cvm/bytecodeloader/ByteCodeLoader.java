@@ -139,7 +139,7 @@ public class ByteCodeLoader {
     public static void main(String[] args) {
         try {
             if (args.length != 1) {
-                throw new IllegalArgumentException("Необходимо указать 1 аргумент – путь к бинарному файлу");
+                throw new IllegalArgumentException("It is necessary to specify 1 argument - the path to the binary file");
             }
             Context ctx = new Context();
             new ByteCodeLoader().setInputPath(args[0]).setCtx(ctx).parse();
