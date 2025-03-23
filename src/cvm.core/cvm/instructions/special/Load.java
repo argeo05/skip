@@ -27,6 +27,26 @@ public final class Load extends VMInstruction {
 
     @Override
     public void run() {
-        ctx.push(value);
+        if (this.type == 0) {
+            ctx.push(value);
+        } else if (this.type == 1) {
+            long constIndex = this.value;
+            String constStr = ctx.constantTable().get(constIndex);
+            if (constStr == null) {
+                throw new RuntimeException("Constant not found by index: " + constIndex);
+            }
+            long value;
+            try {
+                if (constStr.contains(".")) {
+                    float f = Float.parseFloat(constStr);
+                    value = Float.floatToIntBits(f);
+                } else {
+                    value = Long.parseLong(constStr);
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Unknown number format " + constIndex + ": " + constStr);
+            }
+            ctx.push(value);
+        }
     }
 }
