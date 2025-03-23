@@ -87,6 +87,9 @@ public record Context(
         }
 
         StackFrame frame = new StackFrame(fun, argv);
+        for (long arg : argv) {
+            frame.push(arg);
+        }
         stack.push(frame);
 
         execFrame();

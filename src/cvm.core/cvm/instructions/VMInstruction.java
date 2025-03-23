@@ -8,7 +8,7 @@ import cvm.instructions.special.*;
  * Based interface for instuctions.
  */
 public sealed abstract class VMInstruction permits BinaryInstruction, Debug, Get, Invoke, Load, Log, Put {
-    private Byte type;
+    protected Byte type;
 
     public VMInstruction(Byte type) {
         this.type = type;

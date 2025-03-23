@@ -33,7 +33,7 @@ public class StackFrame {
     }
 
     public StackFrame(Function fun, long[] initialValues) {
-        this(new Stack<>(), fun, new long[fun.variablesCount()]);
+        this(new Stack<>(), fun, new long[fun.argc() + fun.variablesCount()]);
         System.arraycopy(
                 initialValues,
                 0,
