@@ -3,6 +3,7 @@ package utils;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -39,16 +40,16 @@ public class ClassFinder {
     }
 
     private void processJar(URL jarUrl, String packagePath, List<Class<?>> classes) throws Exception {
-        String jarPath = jarUrl.getPath().substring(5, jarUrl.getPath().indexOf("!"));
+        // Извлекаем путь к jar-файлу и декодируем его (например, заменяя %20 на пробел)
+        String jarPathEncoded = jarUrl.getPath().substring(5, jarUrl.getPath().indexOf("!"));
+        String jarPath = URLDecoder.decode(jarPathEncoded, "UTF-8");
         try (JarFile jarFile = new JarFile(jarPath)) {
             Enumeration<JarEntry> entries = jarFile.entries();
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 String entryName = entry.getName();
                 if (entryName.startsWith(packagePath) && entryName.endsWith(".class")) {
-                    String className = entryName
-                            .replace('/', '.')
-                            .replace(".class", "");
+                    String className = entryName.replace('/', '.').replace(".class", "");
                     addClass(className, classes);
                 }
             }
