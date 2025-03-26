@@ -11,6 +11,7 @@ test:
   stage: Testing
   script:
     - tests/test.sh
+    - tests/jar.sh
 
 pages:
   stage: DeployDocs
