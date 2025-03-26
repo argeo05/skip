@@ -1,64 +1,97 @@
 package cvm;
 
-import java.util.Stack;
-import cvm.instructions.VMInstruction;
 import cvm.exceptions.EmptyOperandStackException;
+import cvm.instructions.VMInstruction;
 
+/**
+ * StackFrame represents an execution frame for a virtual machine function.
+ * This variant uses LimitedLongStack to store 64-bit numbers with a limit on the number of elements.
+ */
 public class StackFrame {
-    VMInstruction currInstruction;
-    Stack<Long> stack;
-    cvm.Function fun;
-    long[] variables;
+    private VMInstruction currInstruction;
+    private final LimitedLongStack operandStack;
+    private final Function fun;
+    private final long[] variables;
 
-    private StackFrame(Stack<Long> stack, Function fun, long[] variables) {
-        this.stack = stack;
+    private StackFrame(LimitedLongStack operandStack, Function fun, long[] variables) {
+        this.operandStack = operandStack;
         this.fun = fun;
         this.variables = variables;
     }
 
+    /**
+     * Public constructor, creates a StackFrame with a specified stack limit.
+     *
+     * @param fun               The function for which the frame is created.
+     * @param initialValues     Initial values of the function arguments.
+     * @param operandStackLimit Limit on the number of long values in the stack.
+     */
+    public StackFrame(Function fun, long[] initialValues, int operandStackLimit) {
+        this(new LimitedLongStack(operandStackLimit), fun, new long[fun.argc() + fun.variablesCount()]);
+        System.arraycopy(initialValues, 0, this.variables, 0, initialValues.length);
+    }
+
+    /**
+     * Returns the current instruction being executed by the frame.
+     *
+     * @return the current instruction
+     */
     public VMInstruction currInstruction() {
         return currInstruction;
     }
 
-    public Stack<Long> stack() {
-        return stack;
-    }
-
+    /**
+     * Returns the function associated with this frame.
+     *
+     * @return the function
+     */
     public Function fun() {
         return fun;
     }
 
+    /**
+     * Returns the array of frame variables.
+     *
+     * @return the array of variables
+     */
     public long[] variables() {
         return variables;
     }
 
-    public StackFrame(Function fun, long[] initialValues) {
-        this(new Stack<>(), fun, new long[fun.argc() + fun.variablesCount()]);
-        System.arraycopy(
-                initialValues,
-                0,
-                variables,
-                0,
-                initialValues.length
-        );
-    }
-
+    /**
+     * Adds a value to the stack.
+     *
+     * @param value the value to add
+     */
     public void push(long value) {
-        stack.push(value);
+        operandStack.push(value);
     }
 
+    /**
+     * Extracts the top value from the stack.
+     *
+     * @return the top value
+     * @throws EmptyOperandStackException if the stack is empty
+     */
     public long pop() {
-        if (stack.isEmpty()) {
+        if (operandStack.isEmpty()) {
             throw new EmptyOperandStackException(this);
         }
-
-        return stack.pop();
+        return operandStack.pop();
     }
 
+    /**
+     * Returns the top value of the stack without removing it.
+     *
+     * @return the top value
+     */
     public long top() {
-        return stack.peek();
+        return operandStack.peek();
     }
 
+    /**
+     * Executes the sequence of instructions associated with the function.
+     */
     public void exec() {
         for (VMInstruction instruction : fun.code()) {
             currInstruction = instruction;
