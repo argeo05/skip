@@ -2,9 +2,16 @@
 const 1
     0 8
 
-fun main 0 0
-    ld 4
-    ldc 0
+fun main 0 2
+    ld 5
+    put 0
+    ld 7
+    put 1
+    get 0
+    ld 24
+    get 1
+    ld 19
+    sub
     invoke echo
 
 fun echo 2 0
