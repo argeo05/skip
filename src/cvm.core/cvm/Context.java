@@ -59,7 +59,7 @@ public class Context {
      *
      * @return the constant table
      */
-    public Map<Long, String> getConstantTable() {
+    public Map<Long, String> constantTable() {
         return constantTable;
     }
 
