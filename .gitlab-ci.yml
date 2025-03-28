@@ -10,8 +10,7 @@ stages:
 test:
   stage: Testing
   script:
-    - tests/test.sh
-    - tests/jar.sh
+    - mvn clean test
 
 pages:
   stage: DeployDocs
