@@ -57,8 +57,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <directory>${project.parent.basedir}/target</directory>
-    </build>
 </project>

@@ -20,8 +20,4 @@
     <artifactId>App</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-
-    <build>
-        <directory>${project.parent.basedir}/target</directory>
-    </build>
 </project>
