@@ -2,7 +2,7 @@ package cvm.instructions.arithmetic;
 
 import cvm.Context;
 import cvm.exceptions.DivisionByZeroException;
-import cvm.instructions.BinaryInstruction;
+import cvm.instructions.AbstractBinaryInstructionAbstract;
 
 /**
  * <b>Div</b>
@@ -14,7 +14,7 @@ import cvm.instructions.BinaryInstruction;
  * @stackArg rhs divider
  */
 
-public final class Div extends BinaryInstruction {
+public final class Div extends AbstractBinaryInstructionAbstract {
     public Div(Byte type, Context ctx) {
         super(type, ctx);
     }

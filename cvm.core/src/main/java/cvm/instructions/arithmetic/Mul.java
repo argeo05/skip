@@ -1,7 +1,7 @@
 package cvm.instructions.arithmetic;
 
 import cvm.Context;
-import cvm.instructions.BinaryInstruction;
+import cvm.instructions.AbstractBinaryInstructionAbstract;
 
 /**
  * <b>Mul</b>
@@ -13,7 +13,7 @@ import cvm.instructions.BinaryInstruction;
  * @stackArg rhs second multiplier
  */
 
-public final class Mul extends BinaryInstruction {
+public final class Mul extends AbstractBinaryInstructionAbstract {
     public Mul(byte type, Context ctx) {
         super(type, ctx);
     }

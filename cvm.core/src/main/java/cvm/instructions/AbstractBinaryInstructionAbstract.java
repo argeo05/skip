@@ -11,12 +11,12 @@ import cvm.instructions.arithmetic.Sub;
  * <b>BinaryInstruction</b>
  * Class for implements binary instructions to Virtual Machine.
  */
-public abstract sealed class BinaryInstruction extends VMInstruction permits Add, Div, Mul, Sub {
+public abstract sealed class AbstractBinaryInstructionAbstract extends AbstractVmInstruction permits Add, Div, Mul, Sub {
     protected Context ctx;
     protected long rhs;
     protected long lhs;
 
-    public BinaryInstruction(byte type, Context ctx) {
+    public AbstractBinaryInstructionAbstract(byte type, Context ctx) {
         super(type);
         this.ctx = ctx;
     }

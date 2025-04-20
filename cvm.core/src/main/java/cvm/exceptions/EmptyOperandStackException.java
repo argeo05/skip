@@ -1,6 +1,5 @@
 package cvm.exceptions;
 
-
 import cvm.StackFrame;
 
 public class EmptyOperandStackException extends RuntimeException {

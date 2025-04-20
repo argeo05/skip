@@ -18,12 +18,12 @@ public enum Instructions {
     PUT(8),
     INVOKE(9);
 
+    private static final Map<Integer, Instructions> OPCODE_TO_COMMAND_MAP = new HashMap<>();
     private final int opcode;
-    private static final Map<Integer, Instructions> opcodeToCommandMap = new HashMap<>();
 
     static {
         for (Instructions command : Instructions.values()) {
-            opcodeToCommandMap.put(command.opcode, command);
+            OPCODE_TO_COMMAND_MAP.put(command.opcode, command);
         }
     }
 
@@ -42,6 +42,6 @@ public enum Instructions {
      * @return The enum constant with the specified opcode, or null if no such constant exists.
      */
     public static Instructions fromOpcode(int opcode) {
-        return opcodeToCommandMap.get(opcode);
+        return OPCODE_TO_COMMAND_MAP.get(opcode);
     }
 }

@@ -1,6 +1,6 @@
 package cvm.bytecodeloader.instructions;
 
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 import cvm.instructions.special.Invoke;
 import utils.InstrBuilder;
 
@@ -16,7 +16,7 @@ import java.util.Arrays;
 @InstrBuilder("invoke")
 public class InvokeBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct(byte type) {
+    AbstractVmInstruction construct(byte type) {
         if (args[0].charAt(0) != '#') {
             throw new IllegalArgumentException("Wrong constant id: " + Arrays.toString(args));
         }

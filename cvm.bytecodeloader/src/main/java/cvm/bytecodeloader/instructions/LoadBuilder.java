@@ -1,7 +1,7 @@
 package cvm.bytecodeloader.instructions;
 
 import cvm.instructions.special.Load;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 import utils.InstrBuilder;
 
 /**
@@ -19,7 +19,7 @@ public class LoadBuilder extends InstructionBuilder {
     }
 
     @Override
-    public VMInstruction construct(byte type) {
+    public AbstractVmInstruction construct(byte type) {
         long value = Long.parseLong(args[0]);
         return new Load(type, value, ctx);
     }

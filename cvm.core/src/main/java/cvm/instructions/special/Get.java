@@ -1,9 +1,9 @@
 package cvm.instructions.special;
 
 import cvm.Context;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
-public final class Get extends VMInstruction {
+public final class Get extends AbstractVmInstruction {
     Context ctx;
     long ind;
 

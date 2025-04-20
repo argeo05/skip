@@ -1,7 +1,7 @@
 package cvm.bytecodeloader.instructions;
 
 import cvm.instructions.special.Debug;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 import utils.InstrBuilder;
 
 /**
@@ -14,7 +14,7 @@ import utils.InstrBuilder;
 @InstrBuilder("debug")
 public class DebugBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct(byte type) {
+    AbstractVmInstruction construct(byte type) {
         return new Debug(type, ctx);
     }
 

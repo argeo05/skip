@@ -1,11 +1,12 @@
 package cvm;
 
-import cvm.exceptions.EmptyOperandStackException;
-import cvm.exceptions.DivisionByZeroException;
-import cvm.exceptions.StackOverflowException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+
+import cvm.exceptions.DivisionByZeroException;
+import cvm.exceptions.EmptyOperandStackException;
+import cvm.exceptions.StackOverflowException;
 
 /**
  * Represents the execution context of the virtual machine.

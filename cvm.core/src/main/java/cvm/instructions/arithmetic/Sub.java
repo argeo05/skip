@@ -1,7 +1,7 @@
 package cvm.instructions.arithmetic;
 
 import cvm.Context;
-import cvm.instructions.BinaryInstruction;
+import cvm.instructions.AbstractBinaryInstructionAbstract;
 
 /**
  * <b>Sub</b>
@@ -13,7 +13,7 @@ import cvm.instructions.BinaryInstruction;
  * @stackArg rhs subtrahend
  */
 
-public final class Sub extends BinaryInstruction {
+public final class Sub extends AbstractBinaryInstructionAbstract {
     public Sub(byte type, Context ctx) {
         super(type, ctx);
     }

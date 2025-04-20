@@ -1,7 +1,7 @@
 package cvm.bytecodeloader.instructions;
 
 import cvm.Context;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
 import java.util.Arrays;
 
@@ -9,13 +9,13 @@ import java.util.Arrays;
  * <b>InstructionBuilder</b>
  * InstructionBuilder. Builds a generic instruction.
  *
- * @link Uses instruction #{@link VMInstruction}
+ * @link Uses instruction #{@link AbstractVmInstruction}
  */
 public abstract class InstructionBuilder {
     protected Context ctx;
     protected String[] args;
 
-    abstract VMInstruction construct(byte type);
+    abstract AbstractVmInstruction construct(byte type);
     abstract int getArgsCount();
 
     public InstructionBuilder setArgs(String... args) {
@@ -28,7 +28,7 @@ public abstract class InstructionBuilder {
         return this;
     }
 
-    public VMInstruction build(byte type) {
+    public AbstractVmInstruction build(byte type) {
         if (args.length != getArgsCount()) {
             throw new IllegalStateException(
                     "[" + this.getClass().getName() +  "] Invalid arg count: "

@@ -1,7 +1,7 @@
 package cvm.instructions.special;
 
 import cvm.Context;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
 /**
  * <b>Debug</b>
@@ -10,7 +10,7 @@ import cvm.instructions.VMInstruction;
  * @bytecode debug
  * @opcode 6
  */
-public final class Debug extends VMInstruction {
+public final class Debug extends AbstractVmInstruction {
     Context ctx;
 
     public Debug(Byte type, Context ctx) {

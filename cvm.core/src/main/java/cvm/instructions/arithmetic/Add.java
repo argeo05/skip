@@ -1,7 +1,7 @@
 package cvm.instructions.arithmetic;
 
 import cvm.Context;
-import cvm.instructions.BinaryInstruction;
+import cvm.instructions.AbstractBinaryInstructionAbstract;
 
 /**
  * <b>Add</b>
@@ -13,8 +13,8 @@ import cvm.instructions.BinaryInstruction;
  * @stackArg rhs second summand
  */
 
-public final class Add extends BinaryInstruction {
-    public static byte OPCODE = 1;
+public final class Add extends AbstractBinaryInstructionAbstract {
+    public static byte opcode = 1;
 
     public Add(byte type, Context ctx) {
         super(type, ctx);

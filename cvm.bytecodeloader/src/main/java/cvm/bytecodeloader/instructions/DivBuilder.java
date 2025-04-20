@@ -1,7 +1,7 @@
 package cvm.bytecodeloader.instructions;
 
 import cvm.instructions.arithmetic.Div;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 import utils.InstrBuilder;
 
 /**
@@ -14,7 +14,7 @@ import utils.InstrBuilder;
 @InstrBuilder("div")
 public class DivBuilder extends InstructionBuilder {
     @Override
-    VMInstruction construct(byte type) {
+    AbstractVmInstruction construct(byte type) {
         return new Div(type, ctx);
     }
 

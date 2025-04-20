@@ -1,7 +1,7 @@
 package cvm.instructions.special;
 
 import cvm.Context;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
 /**
  * <b>Load</b>
@@ -10,7 +10,7 @@ import cvm.instructions.VMInstruction;
  * @bytecode ld
  * @opcode 0
  */
-public final class Load extends VMInstruction {
+public final class Load extends AbstractVmInstruction {
     Context ctx;
     long value;
 

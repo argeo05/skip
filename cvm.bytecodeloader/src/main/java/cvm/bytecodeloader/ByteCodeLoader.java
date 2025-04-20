@@ -3,7 +3,7 @@ package cvm.bytecodeloader;
 import cvm.Context;
 import cvm.Function;
 import cvm.instructions.Instructions;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 import utils.BytesParser;
 
 import java.io.DataInputStream;
@@ -153,7 +153,7 @@ public class ByteCodeLoader {
                     } else {
                         args = new String[0];
                     }
-                    VMInstruction instruction = resolve(mnemonic)
+                    AbstractVmInstruction instruction = resolve(mnemonic)
                         .setCtx(ctx)
                         .setArgs(args)
                         .build((byte) instrType);

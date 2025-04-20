@@ -1,7 +1,7 @@
 package cvm.instructions.special;
 
 import cvm.Context;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
 /**
  * <b>Log</b>
@@ -12,7 +12,7 @@ import cvm.instructions.VMInstruction;
  * @stackArg value argument
  */
 
-public final class Log extends VMInstruction {
+public final class Log extends AbstractVmInstruction {
     Context ctx;
     long value;
 

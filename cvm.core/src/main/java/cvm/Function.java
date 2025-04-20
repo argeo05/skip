@@ -1,8 +1,9 @@
 package cvm;
 
-import cvm.instructions.VMInstruction;
 import java.util.LinkedList;
 import java.util.List;
+
+import cvm.instructions.AbstractVmInstruction;
 
 /**
  * Represents a virtual machine function, including its name,
@@ -11,13 +12,13 @@ import java.util.List;
  * @param name            the unique name of the function
  * @param argc            the number of arguments this function accepts
  * @param variablesCount  the number of local variables
- * @param code            the list of {@link VMInstruction} instances that make up the function body
+ * @param code            the list of {@link AbstractVmInstruction} instances that make up the function body
  */
 public record Function(
     String name,
     int argc,
     int variablesCount,
-    List<VMInstruction> code
+    List<AbstractVmInstruction> code
 ) {
     /**
      * Constructs a Function with an empty instruction list.
@@ -35,7 +36,7 @@ public record Function(
      *
      * @param instr the instruction to add
      */
-    public void addInstruction(VMInstruction instr) {
+    public void addInstruction(AbstractVmInstruction instr) {
         code.add(instr);
     }
 }

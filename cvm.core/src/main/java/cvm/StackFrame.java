@@ -1,7 +1,7 @@
 package cvm;
 
 import cvm.exceptions.EmptyOperandStackException;
-import cvm.instructions.VMInstruction;
+import cvm.instructions.AbstractVmInstruction;
 
 /**
  * Execution frame for a single function call in the VM.
@@ -17,7 +17,7 @@ import cvm.instructions.VMInstruction;
  * runs its logic, and pushes any results.</p>
  */
 public class StackFrame {
-    private VMInstruction currInstruction;
+    private AbstractVmInstruction currInstruction;
     private final LimitedLongStack operandStack;
     private final Function fun;
     private final long[] variables;
@@ -45,7 +45,7 @@ public class StackFrame {
      *
      * @return the current instruction
      */
-    public VMInstruction currInstruction() {
+    public AbstractVmInstruction currInstruction() {
         return currInstruction;
     }
 
@@ -102,7 +102,7 @@ public class StackFrame {
      * Executes the sequence of instructions associated with the function.
      */
     public void exec() {
-        for (VMInstruction instruction : fun.code()) {
+        for (AbstractVmInstruction instruction : fun.code()) {
             currInstruction = instruction;
             instruction.invoke();
         }
