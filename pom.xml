@@ -43,13 +43,13 @@
                             <target>
                                 <mkdir dir="${project.basedir}/target/all-jars"/>
 
-                                <copy todir="${project.basedir}/target/all-jars">
-                                    <fileset>
-                                        <include name="${project.basedir}/**/target/*.jar"/>
+                                <copy todir="${project.basedir}/target/all-jars" overwrite="true">
+                                    <fileset dir="${project.basedir}">
+                                        <include name="**/target/*.jar"/>
                                     </fileset>
-                                    <mapper type="regexp"
-                                            from="^.*/([^/]+)/target/(.*)$$"
-                                            to="\1-\2"/>
+                                    <mapper>
+                                        <flattenmapper/>
+                                    </mapper>
                                 </copy>
                             </target>
                         </configuration>
