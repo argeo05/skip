@@ -9,7 +9,9 @@
     <packaging>pom</packaging>
 
     <properties>
+        <charset>UTF-8</charset>
         <maven.compiler.release>21</maven.compiler.release>
+        <checkstyle.config.location>${maven.multiModuleProjectDirectory}/codestyle.xml</checkstyle.config.location>
     </properties>
 
     <modules>
@@ -31,6 +33,29 @@
                 <configuration>
                     <release>21</release>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <configLocation>${checkstyle.config.location}</configLocation>
+                    <source>21</source>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <excludes>**/module-info.java</excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate-style</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
