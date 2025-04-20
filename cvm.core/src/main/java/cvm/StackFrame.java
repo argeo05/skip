@@ -4,8 +4,17 @@ import cvm.exceptions.EmptyOperandStackException;
 import cvm.instructions.VMInstruction;
 
 /**
- * StackFrame represents an execution frame for a virtual machine function.
- * This variant uses LimitedLongStack to store 64-bit numbers with a limit on the number of elements.
+ * Execution frame for a single function call in the VM.
+ *
+ * <p>Holds:</p>
+ * <ul>
+ *   <li>An operand stack with a fixed maximum depth.</li>
+ *   <li>The {@link Function} and its instruction list.</li>
+ *   <li>Local variables and arguments in a {@code long[]} of length {@code argc + variablesCount}.</li>
+ * </ul>
+ *
+ * <p>Calling {@link #exec()} iterates over each instruction, pops its operands,
+ * runs its logic, and pushes any results.</p>
  */
 public class StackFrame {
     private VMInstruction currInstruction;
