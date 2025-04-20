@@ -9,7 +9,6 @@ stages:
   - DeployDocs
 
 java-build:
-  image: maven:3.8-openjdk-11
   stage: build
   script:
     - mvn package -D skipTests=true
