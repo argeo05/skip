@@ -56,7 +56,7 @@ public class Compiler {
             }
             int constCount = Integer.parseInt(parts[1]);
             i++;
-            for (int j = 0; j < constCount && i < lines.length;) {
+            for (int j = 0; j < constCount && i < lines.length; ) {
                 String line = lines[i];
                 if (line.startsWith(" ") || line.startsWith("\t")) {
                     String trimmed = line.trim();
@@ -88,11 +88,13 @@ public class Compiler {
                 i++;
                 continue;
             }
+
             if (trimmed.toLowerCase().startsWith("fun ")) {
                 String[] parts = trimmed.split("\\s+");
                 if (parts.length < 4) {
                     throw new RuntimeException("Incorrect function declaration: " + trimmed);
                 }
+
                 String funName = parts[1];
                 int argc = Integer.parseInt(parts[2]);
                 int varCount = Integer.parseInt(parts[3]);
@@ -109,6 +111,7 @@ public class Compiler {
                         i++;
                         continue;
                     }
+
                     Instruction instr = parseInstruction(instrLine, constantTable);
                     func.instructions.add(instr);
                     i++;
@@ -119,7 +122,6 @@ public class Compiler {
             }
         }
 
-        // Build header, constant table, and function table into final output
         ByteArrayOutputStream temp = new ByteArrayOutputStream();
         writeHeader(temp, constantTable.size(), functions.size());
         byte[] headerBytes = temp.toByteArray();
@@ -188,18 +190,67 @@ public class Compiler {
         if (tokens.length == 0) {
             throw new RuntimeException("Empty instruction");
         }
+
         String mnemonic = tokens[0];
         Instruction instr = new Instruction();
-        try {
-            Instructions ins = Instructions.valueOf(mnemonic.toUpperCase());
-            instr.opcode = (byte) ins.getOpcode();
+        if (mnemonic.equalsIgnoreCase("ldc")) {
+            instr.opcode = (byte) Instructions.LD.getOpcode();
+            instr.type = 1; // ldc – type 1
+            if (tokens.length < 2) {
+                throw new RuntimeException("Missing argument for ldc");
+            }
+            instr.argument = Integer.parseInt(tokens[1]);
+        } else if (mnemonic.equalsIgnoreCase("ld")) {
+            instr.opcode = (byte) Instructions.LD.getOpcode();
+            instr.type = 0; // regular ld
+            if (tokens.length < 2) {
+                throw new RuntimeException("Missing argument for ld");
+            }
+            instr.argument = Integer.parseInt(tokens[1]);
+        } else if (mnemonic.equalsIgnoreCase("get")) {
+            instr.opcode = (byte) Instructions.GET.getOpcode();
             instr.type = 0;
-            instr.argument = (tokens.length > 1) ? Integer.parseInt(tokens[1]) : null;
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Unknown instruction: " + mnemonic);
+            if (tokens.length < 2) {
+                throw new RuntimeException("Missing argument for get");
+            }
+            instr.argument = Integer.parseInt(tokens[1]);
+        } else if (mnemonic.equalsIgnoreCase("put")) {
+            instr.opcode = (byte) Instructions.PUT.getOpcode();
+            instr.type = 0;
+            if (tokens.length < 2) {
+                throw new RuntimeException("Missing argument for put");
+            }
+            instr.argument = Integer.parseInt(tokens[1]);
+        } else if (mnemonic.equalsIgnoreCase("invoke")) {
+            instr.opcode = (byte) Instructions.INVOKE.getOpcode();
+            instr.type = 0;
+            if (tokens.length < 2) {
+                throw new RuntimeException("Missing argument for invoke");
+            }
+            String argStr = tokens[1];
+            if (!argStr.startsWith("#")) {
+                int idx = findConstantIndex(constantTable, argStr);
+                if (idx < 0) {
+                    idx = constantTable.size();
+                    constantTable.add(new Constant(Constant.Type.STRING, argStr));
+                }
+                instr.argument = idx;
+            } else {
+                instr.argument = Integer.parseInt(argStr.substring(1));
+            }
+        } else {
+            try {
+                Instructions ins = Instructions.valueOf(mnemonic.toUpperCase());
+                instr.opcode = (byte) ins.getOpcode();
+                instr.type = 0;
+                instr.argument = (tokens.length > 1) ? Integer.parseInt(tokens[1]) : null;
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Unknown instruction: " + mnemonic);
+            }
         }
         return instr;
     }
+
 
     private int findConstantIndex(List<Constant> table, String value) {
         for (int i = 0; i < table.size(); i++) {
@@ -231,7 +282,7 @@ public class Compiler {
     }
 
     private static class Constant {
-        enum Type { INTEGER, FLOAT, STRING }
+        enum Type {INTEGER, FLOAT, STRING}
 
         Type type;
         Object value;
