@@ -1,7 +1,5 @@
 package cvm.compiler;
 
-import utils.BytesParser;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,64 +7,132 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import cvm.instructions.Instructions;
+import utils.BytesParser;
+
 /**
- * Compiler class that compiles source code into bytecode.
+ * The Compiler class is responsible for parsing CVM assembly-like source code,
+ * constructing constant and function tables, and generating the corresponding
+ * bytecode output file.
  */
 public class Compiler {
-    private static class Constant {
-        enum Type {INTEGER, FLOAT, STRING}
-
-        Type type;
-        Object value;
-
-        Constant(Type type, Object value) {
-            this.type = type;
-            this.value = value;
-        }
-    }
-
-    private static class Instruction {
-        byte opcode;
-        byte type;
-        Integer argument;
-    }
-
-    private static class CompiledFunction {
-        String name;
-        int argc;
-        int varCount;
-        List<Instruction> instructions = new ArrayList<>();
-
-        CompiledFunction(String name, int argc, int varCount) {
-            this.name = name;
-            this.argc = argc;
-            this.varCount = varCount;
-        }
-    }
 
     /**
-     * Compiles the source code from the specified path and writes the bytecode to the output path.
+     * Reads the source assembly file from the given path, compiles it to bytecode,
+     * and writes the resulting bytecode to the specified output path.
      *
-     * @param sourcePath the path to the source code file
-     * @param outputPath the path to the output bytecode file
-     * @throws IOException if an I/O error occurs
+     * @param sourcePath the file system path to the source assembly file
+     * @param outputPath the file system path where the compiled bytecode will be written
+     * @throws IOException if an I/O error occurs while reading or writing files
      */
     public void compile(String sourcePath, String outputPath) throws IOException {
         String source = Files.readString(Path.of(sourcePath));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        writeHeader(output, 0, 0); // temporarily – will update later
+        writeHeader(output, 0, 0);
         compileToBytecode(source, output);
         Files.write(Path.of(outputPath), output.toByteArray());
     }
 
-    /**
-     * Writes the header to the bytecode output stream.
-     *
-     * @param output        the output stream to write the header to
-     * @param constantCount the number of constants in the constant table
-     * @param functionCount the number of functions in the function table
-     * @throws IOException if an I/O error occurs
-     */
+    private void compileToBytecode(String source, ByteArrayOutputStream output) throws IOException {
+        String[] lines = source.split("\n");
+        int i = 0;
+        List<Constant> constantTable = new ArrayList<>();
+        List<CompiledFunction> functions = new ArrayList<>();
+
+        while (i < lines.length) {
+            String trimmed = lines[i].trim();
+            if (trimmed.isEmpty() || trimmed.startsWith(";")) {
+                i++;
+                continue;
+            }
+            break;
+        }
+
+        // Parse constant block if present
+        if (i < lines.length && lines[i].trim().toLowerCase().startsWith("const ")) {
+            String[] parts = lines[i].trim().split("\\s+");
+            if (parts.length < 2) {
+                throw new RuntimeException("Incorrect constant block definition");
+            }
+            int constCount = Integer.parseInt(parts[1]);
+            i++;
+            for (int j = 0; j < constCount && i < lines.length;) {
+                String line = lines[i];
+                if (line.startsWith(" ") || line.startsWith("\t")) {
+                    String trimmed = line.trim();
+                    int spaceIndex = trimmed.indexOf(' ');
+                    if (spaceIndex < 0) {
+                        throw new RuntimeException("Incorrect constant definition: " + trimmed);
+                    }
+                    String literal = trimmed.substring(spaceIndex + 1).trim();
+                    if (literal.startsWith("\"") && literal.endsWith("\"") && literal.length() >= 2) {
+                        literal = literal.substring(1, literal.length() - 1);
+                        constantTable.add(new Constant(Constant.Type.STRING, literal));
+                    } else if (literal.contains(".")) {
+                        float f = Float.parseFloat(literal);
+                        constantTable.add(new Constant(Constant.Type.FLOAT, f));
+                    } else {
+                        int val = Integer.parseInt(literal);
+                        constantTable.add(new Constant(Constant.Type.INTEGER, val));
+                    }
+                    j++;
+                }
+                i++;
+            }
+        }
+
+        // Parse function definitions
+        while (i < lines.length) {
+            String trimmed = lines[i].trim();
+            if (trimmed.isEmpty() || trimmed.startsWith(";")) {
+                i++;
+                continue;
+            }
+            if (trimmed.toLowerCase().startsWith("fun ")) {
+                String[] parts = trimmed.split("\\s+");
+                if (parts.length < 4) {
+                    throw new RuntimeException("Incorrect function declaration: " + trimmed);
+                }
+                String funName = parts[1];
+                int argc = Integer.parseInt(parts[2]);
+                int varCount = Integer.parseInt(parts[3]);
+                if (findConstantIndex(constantTable, funName) < 0) {
+                    constantTable.add(new Constant(Constant.Type.STRING, funName));
+                }
+
+                CompiledFunction func = new CompiledFunction(funName, argc, varCount);
+                i++;
+
+                while (i < lines.length && (lines[i].startsWith(" ") || lines[i].startsWith("\t"))) {
+                    String instrLine = lines[i].replaceAll(";.*", "").trim();
+                    if (instrLine.isEmpty()) {
+                        i++;
+                        continue;
+                    }
+                    Instruction instr = parseInstruction(instrLine, constantTable);
+                    func.instructions.add(instr);
+                    i++;
+                }
+                functions.add(func);
+            } else {
+                i++;
+            }
+        }
+
+        // Build header, constant table, and function table into final output
+        ByteArrayOutputStream temp = new ByteArrayOutputStream();
+        writeHeader(temp, constantTable.size(), functions.size());
+        byte[] headerBytes = temp.toByteArray();
+
+        ByteArrayOutputStream finalOutput = new ByteArrayOutputStream();
+        finalOutput.write(headerBytes);
+        writeConstantTable(finalOutput, constantTable);
+        writeFunctionTable(finalOutput, functions);
+
+        output.reset();
+        output.write(finalOutput.toByteArray());
+    }
+
     private void writeHeader(ByteArrayOutputStream output, int constantCount, int functionCount) throws IOException {
         output.write(new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65});
         output.write(new byte[]{0x00, 0x01, 0x00, 0x00, 0x00, 0x00});
@@ -75,13 +141,6 @@ public class Compiler {
         output.write(new byte[20]);
     }
 
-    /**
-     * Writes the constant table to the bytecode output stream.
-     *
-     * @param output        the output stream to write the constant table to
-     * @param constantTable the list of constants to write
-     * @throws IOException if an I/O error occurs
-     */
     private void writeConstantTable(ByteArrayOutputStream output, List<Constant> constantTable) throws IOException {
         for (Constant constant : constantTable) {
             switch (constant.type) {
@@ -101,17 +160,11 @@ public class Compiler {
                     output.write(BytesParser.toBytes(strBytes.length, 4));
                     output.write(strBytes);
                     break;
+                default:
             }
         }
     }
 
-    /**
-     * Writes the function table to the bytecode output stream.
-     *
-     * @param output    the output stream to write the function table to
-     * @param functions the list of functions to write
-     * @throws IOException if an I/O error occurs
-     */
     private void writeFunctionTable(ByteArrayOutputStream output, List<CompiledFunction> functions) throws IOException {
         for (CompiledFunction func : functions) {
             byte[] nameBytes = func.name.getBytes("UTF-8");
@@ -130,10 +183,39 @@ public class Compiler {
         }
     }
 
+    private Instruction parseInstruction(String line, List<Constant> constantTable) {
+        String[] tokens = line.split("\\s+");
+        if (tokens.length == 0) {
+            throw new RuntimeException("Empty instruction");
+        }
+        String mnemonic = tokens[0];
+        Instruction instr = new Instruction();
+        try {
+            Instructions ins = Instructions.valueOf(mnemonic.toUpperCase());
+            instr.opcode = (byte) ins.getOpcode();
+            instr.type = 0;
+            instr.argument = (tokens.length > 1) ? Integer.parseInt(tokens[1]) : null;
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Unknown instruction: " + mnemonic);
+        }
+        return instr;
+    }
+
+    private int findConstantIndex(List<Constant> table, String value) {
+        for (int i = 0; i < table.size(); i++) {
+            Constant c = table.get(i);
+            if (c.type == Constant.Type.STRING && c.value.equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
-     * The main method that runs the compiler.
+     * The application entry point for the Compiler. Expects two arguments:
+     * the source file path and the output file path.
      *
-     * @param args the command line arguments: sourcePath and outputPath
+     * @param args an array of command-line arguments: [0]=sourcePath, [1]=outputPath
      */
     public static void main(String[] args) {
         try {
@@ -145,6 +227,37 @@ public class Compiler {
         } catch (Exception e) {
             System.err.println("Compilation failed: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private static class Constant {
+        enum Type { INTEGER, FLOAT, STRING }
+
+        Type type;
+        Object value;
+
+        Constant(Type type, Object value) {
+            this.type = type;
+            this.value = value;
+        }
+    }
+
+    private static final class Instruction {
+        byte opcode;
+        byte type;
+        Integer argument;
+    }
+
+    private static class CompiledFunction {
+        String name;
+        int argc;
+        int varCount;
+        List<Instruction> instructions = new ArrayList<>();
+
+        CompiledFunction(String name, int argc, int varCount) {
+            this.name = name;
+            this.argc = argc;
+            this.varCount = varCount;
         }
     }
 }
