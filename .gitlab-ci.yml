@@ -1,7 +1,7 @@
 default:
   tags:
     - docker
-  image: gradle:jdk21-noble
+  image: maven:3.9-eclipse-temurin-21
 
 stages:
   - build
