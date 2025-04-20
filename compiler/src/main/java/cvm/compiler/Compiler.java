@@ -48,7 +48,6 @@ public class Compiler {
             break;
         }
 
-        // Parse constant block if present
         if (i < lines.length && lines[i].trim().toLowerCase().startsWith("const ")) {
             String[] parts = lines[i].trim().split("\\s+");
             if (parts.length < 2) {
