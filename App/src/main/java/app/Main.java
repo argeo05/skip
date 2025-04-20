@@ -19,9 +19,9 @@ public class Main {
             throw new IllegalArgumentException("0 arguments given, must be at least 1");
         }
         if (args.length > 1) {
-            startVM(args[0], args[1]);
+            startVm(args[0], args[1]);
         } else {
-            startVM(args[0], null);
+            startVm(args[0], null);
         }
     }
 
@@ -31,7 +31,7 @@ public class Main {
      * @param path the path to the binary file
      * @param stackLimitArg the operand stack limit argument
      */
-    private static void startVM(String path, String stackLimitArg) {
+    private static void startVm(String path, String stackLimitArg) {
         Context ctx = new ContextBuilder().build();
         if (stackLimitArg != null) {
             int limit = parseStackLimit(stackLimitArg);
@@ -48,18 +48,18 @@ public class Main {
      * @return the operand stack limit in number of long values
      */
     private static int parseStackLimit(String arg) {
-        arg = arg.toLowerCase().trim();
+        String argTemp = arg.toLowerCase().trim();
         long bytes;
-        if (arg.endsWith("gb")) {
-            bytes = Long.parseLong(arg.substring(0, arg.length() - 2).trim()) * 1024L * 1024 * 1024;
-        } else if (arg.endsWith("mb")) {
-            bytes = Long.parseLong(arg.substring(0, arg.length() - 2).trim()) * 1024L * 1024;
-        } else if (arg.endsWith("kb")) {
-            bytes = Long.parseLong(arg.substring(0, arg.length() - 2).trim()) * 1024L;
-        } else if (arg.endsWith("b")) {
-            bytes = Long.parseLong(arg.substring(0, arg.length() - 1).trim());
+        if (argTemp.endsWith("gb")) {
+            bytes = Long.parseLong(argTemp.substring(0, argTemp.length() - 2).trim()) * 1024L * 1024 * 1024;
+        } else if (argTemp.endsWith("mb")) {
+            bytes = Long.parseLong(argTemp.substring(0, argTemp.length() - 2).trim()) * 1024L * 1024;
+        } else if (argTemp.endsWith("kb")) {
+            bytes = Long.parseLong(argTemp.substring(0, argTemp.length() - 2).trim()) * 1024L;
+        } else if (argTemp.endsWith("b")) {
+            bytes = Long.parseLong(argTemp.substring(0, argTemp.length() - 1).trim());
         } else {
-            bytes = Long.parseLong(arg);
+            bytes = Long.parseLong(argTemp);
         }
         return (int) (bytes / 8);
     }
