@@ -1,11 +1,5 @@
 package cvm.bytecodeloader;
 
-import cvm.Context;
-import cvm.Function;
-import cvm.instructions.Instructions;
-import cvm.instructions.AbstractVmInstruction;
-import utils.BytesParser;
-
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,10 +7,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cvm.Context;
+import cvm.Function;
+import cvm.instructions.AbstractVmInstruction;
+import cvm.instructions.Instructions;
+import utils.BytesParser;
+
 import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
 
 /**
- * {@code ByteCodeLoader} reads CVM binary format, translates into VM structures and wires them into a ready-to-run {@link cvm.Context context}.
+ * {@code ByteCodeLoader} reads CVM binary format,
+ * translates into VM structures and wires them into a ready-to-run {@link cvm.Context context}.
  *
  * <p>Validates file header (magic number, version, section lengths) and deserialises:</p>
  * <p>After {@link #parse()} completes successfully, invoke {@link cvm.Context#start()} to begin execution.</p>
@@ -25,11 +26,15 @@ import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
  */
 public class ByteCodeLoader {
 
-    /** Absolute or relative path to the input binary file set via
-     *  {@link #setInputPath(String)}. */
+    /**
+     * Absolute or relative path to the input binary file set via
+     * {@link #setInputPath(String)}.
+     */
     private String inputPath;
 
-    /** The {@link Context} to be populated during {@link #parse()}. */
+    /**
+     * The {@link Context} to be populated during {@link #parse()}.
+     */
     private Context ctx;
 
     /**
@@ -154,9 +159,9 @@ public class ByteCodeLoader {
                         args = new String[0];
                     }
                     AbstractVmInstruction instruction = resolve(mnemonic)
-                        .setCtx(ctx)
-                        .setArgs(args)
-                        .build((byte) instrType);
+                            .setCtx(ctx)
+                            .setArgs(args)
+                            .build((byte) instrType);
                     fun.addInstruction(instruction);
                 }
                 ctx.addFun(fun);
@@ -192,12 +197,15 @@ public class ByteCodeLoader {
      *
      * @param opcode numeric opcode as defined in {@link Instructions}
      * @return {@code true} if the instruction expects an argument; {@code false}
-     *         otherwise
+     * otherwise
      */
     boolean requiresArgument(int opcode) {
-        return opcode == Instructions.LD.getOpcode() ||
-            opcode == Instructions.GET.getOpcode() ||
-            opcode == Instructions.PUT.getOpcode() ||
-            opcode == Instructions.INVOKE.getOpcode();
+        return opcode == Instructions.LD.getOpcode()
+                ||
+                opcode == Instructions.GET.getOpcode()
+                ||
+                opcode == Instructions.PUT.getOpcode()
+                ||
+                opcode == Instructions.INVOKE.getOpcode();
     }
 }

@@ -1,18 +1,18 @@
 package cvm.bytecodeloader.instructions;
 
-import cvm.instructions.arithmetic.Sub;
 import cvm.instructions.AbstractVmInstruction;
+import cvm.instructions.arithmetic.Sub;
 import utils.InstrBuilder;
 
 /**
- * <b>SubBuilder</b>
- * InstructionBuilder. Builds subtraction instruction.
+ * <b>SubBuilderAbstract</b>
+ * AbstractInstructionBuilder. Builds subtraction instruction.
  *
  * @link Uses instruction #{@link Sub}
  * @bytecode sub
  */
 @InstrBuilder("sub")
-public class SubBuilder extends InstructionBuilder {
+public class SubBuilderAbstract extends AbstractInstructionBuilder {
     @Override
     AbstractVmInstruction construct(byte type) {
         return new Sub(type, ctx);

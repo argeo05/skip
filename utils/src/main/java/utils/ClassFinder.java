@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -50,8 +51,7 @@ public class ClassFinder {
         return classes;
     }
 
-    // Private helpers omitted from Javadoc
-    private void processJar(URL jarUrl, String packagePath, List<Class<?>> classes) throws Exception {
+    private void processJar(URL jarUrl, String packagePath, List<Class<?>> classes) throws IOException {
         String jarPath = URLDecoder.decode(
                 jarUrl.getPath().substring(5, jarUrl.getPath().indexOf('!')),
                 "UTF-8"
@@ -70,7 +70,9 @@ public class ClassFinder {
 
     private void processDirectory(URL resource, List<Class<?>> classes) throws URISyntaxException {
         File dir = new File(resource.toURI());
-        if (!dir.exists()) return;
+        if (!dir.exists()) {
+            return;
+        }
         scanDirectory(dir, basePackage, classes);
     }
 

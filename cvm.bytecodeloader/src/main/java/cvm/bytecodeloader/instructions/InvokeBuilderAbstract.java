@@ -1,20 +1,22 @@
 package cvm.bytecodeloader.instructions;
 
+import java.util.Arrays;
+
 import cvm.instructions.AbstractVmInstruction;
 import cvm.instructions.special.Invoke;
 import utils.InstrBuilder;
 
-import java.util.Arrays;
+
 
 /**
- * <b>InvokeBuilder</b>
- * InstructionBuilder. Builds the invoke instruction.
+ * <b>InvokeBuilderAbstract</b>
+ * AbstractInstructionBuilder. Builds the invoke instruction.
  *
  * @link Uses instruction {@link Invoke}
  * @bytecode invoke
  */
 @InstrBuilder("invoke")
-public class InvokeBuilder extends InstructionBuilder {
+public class InvokeBuilderAbstract extends AbstractInstructionBuilder {
     @Override
     AbstractVmInstruction construct(byte type) {
         if (args[0].charAt(0) != '#') {

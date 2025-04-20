@@ -1,18 +1,18 @@
 package cvm.bytecodeloader.instructions;
 
-import cvm.instructions.special.Put;
 import cvm.instructions.AbstractVmInstruction;
+import cvm.instructions.special.Put;
 import utils.InstrBuilder;
 
 /**
- * <b>PutBuilder</b>
- * InstructionBuilder. Builds the put instruction.
+ * <b>PutBuilderAbstract</b>
+ * AbstractInstructionBuilder. Builds the put instruction.
  *
  * @link Uses instruction {@link Put}
  * @bytecode put
  */
 @InstrBuilder("put")
-public class PutBuilder extends InstructionBuilder {
+public class PutBuilderAbstract extends AbstractInstructionBuilder {
     @Override
     AbstractVmInstruction construct(byte type) {
         long index = Long.parseLong(args[0]);
