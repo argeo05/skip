@@ -6,8 +6,24 @@ import utils.BytesParser;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Utility for converting compiled bytecode files into a human-readable
+ * assembly-like representation, including constants and instructions.
+ */
 public final class Disassembler {
 
+    /**
+     * Reads a binary bytecode file from the given input path, disassembles
+     * its contents into textual form, and writes the result to the specified
+     * output path.
+     *
+     * <p>The output format begins with a list of constants, then for each
+     * function emits its signature and indented instructions.</p>
+     *
+     * @param inputPath  the file system path to the bytecode input file
+     * @param outputPath the file system path where the disassembled text will be written
+     * @throws IOException if an I/O error occurs during reading or writing
+     */
     public static void disassemble(String inputPath, String outputPath) throws IOException {
         try (DataInputStream dis = new DataInputStream(new FileInputStream(inputPath));
              BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
@@ -59,8 +75,7 @@ public final class Disassembler {
                         int len = (int) BytesParser.toDeciminal(lenBytes);
                         byte[] strBytes = new byte[len];
                         dis.readFully(strBytes);
-                        value = new String(strBytes, "UTF-8");
-                        value = "\"" + value + "\"";
+                        value = "\"" + new String(strBytes, "UTF-8") + "\"";
                         break;
                     }
                     default:
@@ -125,6 +140,7 @@ public final class Disassembler {
         }
     }
 
+    // private helper omitted from Javadoc
     private static boolean requiresArgument(int opcode) {
         return opcode == Instructions.LD.getOpcode() ||
                 opcode == Instructions.GET.getOpcode() ||
@@ -132,6 +148,13 @@ public final class Disassembler {
                 opcode == Instructions.INVOKE.getOpcode();
     }
 
+    /**
+     * Entry point for command-line usage. Expects two arguments:
+     * the input bytecode file path and the output text file path.
+     * Prints usage instructions or error details to standard error.
+     *
+     * @param args command-line arguments: [inputPath, outputPath]
+     */
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("Usage: Disassembler <inputPath> <outputPath>");
