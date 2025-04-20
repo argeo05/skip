@@ -1,10 +1,16 @@
 package cvm.disassembler;
 
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cvm.instructions.Instructions;
 import utils.BytesParser;
-
-import java.io.*;
-import java.util.*;
 
 /**
  * Utility for converting compiled bytecode files into a human-readable
@@ -28,7 +34,7 @@ public final class Disassembler {
         try (DataInputStream dis = new DataInputStream(new FileInputStream(inputPath));
              BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
 
-            byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte)0x83, 0x65};
+            byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65};
             byte[] magic = new byte[4];
             dis.readFully(magic);
             if (!Arrays.equals(magic, expectedMagic)) {
@@ -53,23 +59,22 @@ public final class Disassembler {
             for (int i = 0; i < constantCount; i++) {
                 int type = dis.readUnsignedByte();
                 String value;
+                byte[] data;
                 switch (type) {
-                    case 1: { // INTEGER
-                        byte[] data = new byte[4];
+                    case 1: // INTEGER
+                        data = new byte[4];
                         dis.readFully(data);
                         int intValue = (int) BytesParser.toDeciminal(data);
                         value = String.valueOf(intValue);
                         break;
-                    }
-                    case 2: { // FLOAT
-                        byte[] data = new byte[4];
+                    case 2: // FLOAT
+                        data = new byte[4];
                         dis.readFully(data);
                         int bits = (int) BytesParser.toDeciminal(data);
                         float f = Float.intBitsToFloat(bits);
                         value = String.valueOf(f);
                         break;
-                    }
-                    case 3: { // STRING
+                    case 3: // STRING
                         byte[] lenBytes = new byte[4];
                         dis.readFully(lenBytes);
                         int len = (int) BytesParser.toDeciminal(lenBytes);
@@ -77,7 +82,6 @@ public final class Disassembler {
                         dis.readFully(strBytes);
                         value = "\"" + new String(strBytes, "UTF-8") + "\"";
                         break;
-                    }
                     default:
                         throw new IOException("Unknown constant type: " + type);
                 }
@@ -142,9 +146,12 @@ public final class Disassembler {
 
     // private helper omitted from Javadoc
     private static boolean requiresArgument(int opcode) {
-        return opcode == Instructions.LD.getOpcode() ||
-                opcode == Instructions.GET.getOpcode() ||
-                opcode == Instructions.PUT.getOpcode() ||
+        return opcode == Instructions.LD.getOpcode()
+                ||
+                opcode == Instructions.GET.getOpcode()
+                ||
+                opcode == Instructions.PUT.getOpcode()
+                ||
                 opcode == Instructions.INVOKE.getOpcode();
     }
 
