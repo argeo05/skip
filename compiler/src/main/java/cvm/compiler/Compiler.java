@@ -56,7 +56,7 @@ public class Compiler {
             }
             int constCount = Integer.parseInt(parts[1]);
             i++;
-            for (int j = 0; j < constCount && i < lines.length; ) {
+            for (int j = 0; j < constCount && i < lines.length;) {
                 String line = lines[i];
                 if (line.startsWith(" ") || line.startsWith("\t")) {
                     String trimmed = line.trim();
@@ -251,7 +251,6 @@ public class Compiler {
         return instr;
     }
 
-
     private int findConstantIndex(List<Constant> table, String value) {
         for (int i = 0; i < table.size(); i++) {
             Constant c = table.get(i);
@@ -282,7 +281,7 @@ public class Compiler {
     }
 
     private static class Constant {
-        enum Type {INTEGER, FLOAT, STRING}
+        enum Type { INTEGER, FLOAT, STRING }
 
         Type type;
         Object value;
