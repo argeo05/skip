@@ -5,28 +5,68 @@ import cvm.Function;
 import cvm.instructions.Instructions;
 import cvm.instructions.VMInstruction;
 import utils.BytesParser;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
 
+/**
+ * {@code ByteCodeLoader} reads CVM binary format, translates into VM structures and wires them into a ready-to-run {@link cvm.Context context}.
+ *
+ * <p>Validates file header (magic number, version, section lengths) and deserialises:</p>
+ * <p>After {@link #parse()} completes successfully, invoke {@link cvm.Context#start()} to begin execution.</p>
+ *
+ * @see InstructionBuilderResolver
+ */
 public class ByteCodeLoader {
+
+    /** Absolute or relative path to the input binary file set via
+     *  {@link #setInputPath(String)}. */
     private String inputPath;
+
+    /** The {@link Context} to be populated during {@link #parse()}. */
     private Context ctx;
 
+    /**
+     * Specifies the binary file to read.
+     *
+     * @param inputPath path to <code>*.cvm</code> byte‑code file
+     * @return this loader instance for fluent chaining
+     */
     public ByteCodeLoader setInputPath(String inputPath) {
         this.inputPath = inputPath;
         return this;
     }
 
+    /**
+     * Assigns the execution context that will be filled with constants and
+     * functions discovered in the input file.
+     *
+     * @param ctx the (typically fresh) VM context to initialise
+     * @return this loader instance for fluent chaining
+     */
     public ByteCodeLoader setCtx(Context ctx) {
         this.ctx = ctx;
         return this;
     }
 
+    /**
+     * Performs the actual deserialisation of the binary file specified by
+     * {@link #setInputPath(String)} into the context set by
+     * {@link #setCtx(Context)}.
+     *
+     * <p>All low‑level IO and format‑checking errors are re‑thrown as unchecked
+     * {@link RuntimeException RuntimeExceptions} to make the API convenient for
+     * callers.</p>
+     *
+     * @throws RuntimeException if an I/O error occurs or the file contents are
+     *                          malformed
+     */
     public void parse() {
         try (DataInputStream dis = new DataInputStream(new FileInputStream(inputPath))) {
             byte[] expectedMagic = new byte[]{(byte) 0x83, 0x79, (byte) 0x83, 0x65};
@@ -75,6 +115,7 @@ public class ByteCodeLoader {
                 constantTable.add(value);
                 ctx.addConst(value);
             }
+
             for (int f = 0; f < functionCount; f++) {
                 byte[] nameLenBytes = new byte[4];
                 dis.readFully(nameLenBytes);
@@ -94,6 +135,7 @@ public class ByteCodeLoader {
 
                 int instrCount = (int) BytesParser.toDeciminal(instrCountBytes);
                 Function fun = new Function(funName, argc, varCount);
+
                 for (int j = 0; j < instrCount; j++) {
                     int opcode = dis.readUnsignedByte();
                     int instrType = dis.readUnsignedByte();
@@ -111,15 +153,10 @@ public class ByteCodeLoader {
                     } else {
                         args = new String[0];
                     }
-                    VMInstruction instruction;
-                    try {
-                        instruction = resolve(mnemonic)
-                                .setCtx(ctx)
-                                .setArgs(args)
-                                .build((byte) instrType);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    VMInstruction instruction = resolve(mnemonic)
+                        .setCtx(ctx)
+                        .setArgs(args)
+                        .build((byte) instrType);
                     fun.addInstruction(instruction);
                 }
                 ctx.addFun(fun);
@@ -129,13 +166,12 @@ public class ByteCodeLoader {
         }
     }
 
-    private boolean requiresArgument(int opcode) {
-        return opcode == Instructions.LD.getOpcode() ||
-                opcode == Instructions.GET.getOpcode() ||
-                opcode == Instructions.PUT.getOpcode() ||
-                opcode == Instructions.INVOKE.getOpcode();
-    }
-
+    /**
+     * Launches the VM from the command line. Expects a single argument — the
+     * path to a compiled binary program.
+     *
+     * @param args CLI arguments; length <strong>must</strong> be 1
+     */
     public static void main(String[] args) {
         try {
             if (args.length != 1) {
@@ -148,5 +184,20 @@ public class ByteCodeLoader {
             System.err.println("Parsing failed: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Determines whether an opcode requires a four‑byte integer argument.
+     * Package‑private for testability.
+     *
+     * @param opcode numeric opcode as defined in {@link Instructions}
+     * @return {@code true} if the instruction expects an argument; {@code false}
+     *         otherwise
+     */
+    boolean requiresArgument(int opcode) {
+        return opcode == Instructions.LD.getOpcode() ||
+            opcode == Instructions.GET.getOpcode() ||
+            opcode == Instructions.PUT.getOpcode() ||
+            opcode == Instructions.INVOKE.getOpcode();
     }
 }
