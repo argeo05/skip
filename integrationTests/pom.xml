@@ -4,9 +4,14 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.example</groupId>
+    <parent>
+        <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
+        <artifactId>vm</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <artifactId>integrationTests</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -22,38 +27,33 @@
             <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
             <artifactId>cvm.core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>cvm.core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>cvm.core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
+            <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
             <artifactId>compiler</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
             <artifactId>disassembler</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>App</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
+            <artifactId>app</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>abramov-georgii.vm.java.atpd.com.gitlab</groupId>
+            <artifactId>cvm.bytecodeloader</artifactId>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
