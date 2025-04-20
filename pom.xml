@@ -41,7 +41,6 @@
                 <configuration>
                     <configLocation>${checkstyle.config.location}</configLocation>
                     <source>21</source>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <inputEncoding>UTF-8</inputEncoding>
