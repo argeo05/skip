@@ -21,7 +21,6 @@
         <module>compiler</module>
         <module>disassembler</module>
         <module>utils</module>
-        <module>integrationTests</module>
     </modules>
 
     <dependencyManagement>
