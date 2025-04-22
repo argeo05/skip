@@ -242,26 +242,71 @@ Arguments:   2-byte reference
                         <td>-</td>
                     </tr>
                     <tr>
-                        <td>7-127</td>
+                        <td>1</td>
+                        <td>4 bytes constant pool reference</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>input</td>
+                        <td>Read an integer from standard input and push it onto the stack</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>mod</td>
+                        <td>Pop two args and push their remainder</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>compare</td>
+                        <td>Pop two args and push 1 if comparison holds, otherwise 0 (<code>type</code>: 0 ≤, 1 &lt;, 2 ≥, 3 &gt;)</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>equal</td>
+                        <td>Pop two args and push 1 if equality holds, otherwise 0 (<code>type</code>: 0 ==, 1 !=)</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>and</td>
+                        <td>Pop two args and push 1 if both operands are non-zero, otherwise 0</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>or</td>
+                        <td>Pop two args and push 1 if at least one operand is non-zero, otherwise 0</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>not</td>
+                        <td>Pop one arg and push 1 if it's zero, otherwise 0</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>xor</td>
+                        <td>Pop two args and push 1 if exactly one operand is non-zero, otherwise 0</td>
+                        <td>0</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>18-127</td>
                         <td>-</td>
                         <td>Reserved for additional instructions</td>
                         <td>-</td>
                         <td>-</td>
-                    </tr>
-                    <tr>
-                        <td><code>GET</code></td>
-                        <td>7</td>
-                        <td>Pushes a local variable’s value from an index <code>ind</code> onto the stack.</td>
-                    </tr>
-                    <tr>
-                        <td><code>PUT</code></td>
-                        <td>8</td>
-                        <td>Pops a value from the stack and stores it into a local variable at index <code>ind</code>.</td>
-                    </tr>
-                    <tr>
-                        <td><code>INVOKE</code></td>
-                        <td>9</td>
-                        <td>Invokes a function by its identifier (popping the required number of arguments from the stack beforehand).</td>
                     </tr>
                 </tbody>
             </table>
@@ -269,22 +314,80 @@ Arguments:   2-byte reference
             <h4>Table of Instructions for non-zero type:</h4>
             <table>
                 <thead>
-                    <tr>
+                <tr>
                     <th>Opcode</th>
                     <th>Instruction</th>
+                    <th>Type</th>
                     <th>Description</th>
                     <th>Argument Count</th>
                     <th>Argument Description</th>
-                    </tr>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                <tr>
                     <td>0</td>
                     <td>ld</td>
+                    <td>0</td>
+                    <td>Load immediate value o<nto the stack</td>
+                    <td>1</td>
+                    <td>4-byte immediate value</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>ld</td>
+                    <td>1</td>
                     <td>Load constant from the constant pool</td>
                     <td>1</td>
                     <td>4-byte constant pool reference</td>
-                    </tr>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>compare</td>
+                    <td>0</td>
+                    <td>Pop two args and push 1 if lhs ≤ rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>compare</td>
+                    <td>1</td>
+                    <td>Pop two args and push 1 if lhs &lt; rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>compare</td>
+                    <td>2</td>
+                    <td>Pop two args and push 1 if lhs ≥ rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>compare</td>
+                    <td>3</td>
+                    <td>Pop two args and push 1 if lhs &gt; rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>equal</td>
+                    <td>0</td>
+                    <td>Pop two args and push 1 if lhs == rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>equal</td>
+                    <td>1</td>
+                    <td>Pop two args and push 1 if lhs != rhs</td>
+                    <td>0</td>
+                    <td>-</td>
+                </tr>
                 </tbody>
             </table>
         </section>
