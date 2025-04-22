@@ -16,7 +16,11 @@ public enum Instructions {
     DEBUG(6),
     GET(7),
     PUT(8),
-    INVOKE(9);
+    INVOKE(9),
+    INPUT(10),
+    MOD(11),
+    COMPARE(12),
+    EQUAL(13);
 
     private static final Map<Integer, Instructions> OPCODE_TO_COMMAND_MAP = new HashMap<>();
     private final int opcode;
