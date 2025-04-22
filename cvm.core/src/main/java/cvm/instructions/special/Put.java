@@ -22,4 +22,9 @@ public final class Put extends AbstractVmInstruction {
     public void run() {
         ctx.setVar(ind, value);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 1;
+    }
 }

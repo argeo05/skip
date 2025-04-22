@@ -21,4 +21,9 @@ public final class And extends AbstractBinaryInstructionAbstract {
     protected long calc() {
         return (lhs != 0 && rhs != 0) ? 1L : 0L;
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

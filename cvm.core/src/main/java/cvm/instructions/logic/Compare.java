@@ -33,4 +33,9 @@ public final class Compare extends AbstractBinaryInstructionAbstract {
             default -> throw new IllegalArgumentException("Unknown compare type: " + type);
         };
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

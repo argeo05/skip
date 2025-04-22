@@ -26,4 +26,9 @@ public final class Debug extends AbstractVmInstruction {
     public void run() {
         System.out.println(ctx.top());
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

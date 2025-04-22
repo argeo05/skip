@@ -27,4 +27,9 @@ public final class Equal extends AbstractBinaryInstructionAbstract {
                 ? (lhs == rhs ? 1L : 0L)
                 : (lhs != rhs ? 1L : 0L);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

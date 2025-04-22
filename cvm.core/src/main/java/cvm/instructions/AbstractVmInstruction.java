@@ -28,6 +28,8 @@ public abstract sealed class AbstractVmInstruction
 
     protected abstract void run();
 
+    public abstract int getArgsCount();
+
     public void invoke() {
         popArgs();
         run();

@@ -23,4 +23,9 @@ public final class Xor extends AbstractBinaryInstructionAbstract {
         boolean b = rhs != 0;
         return (a ^ b) ? 1L : 0L;
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

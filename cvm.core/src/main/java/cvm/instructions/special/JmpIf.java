@@ -30,4 +30,9 @@ public final class JmpIf extends AbstractVmInstruction {
             ctx.jumpTo(target);
         }
     }
+
+    @Override
+    public int getArgsCount() {
+        return 1;
+    }
 }

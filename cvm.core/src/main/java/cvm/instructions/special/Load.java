@@ -49,4 +49,9 @@ public final class Load extends AbstractVmInstruction {
             ctx.push(value);
         }
     }
+
+    @Override
+    public int getArgsCount() {
+        return 1;
+    }
 }

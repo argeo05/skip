@@ -26,4 +26,9 @@ public final class Div extends AbstractBinaryInstructionAbstract {
         }
         return lhs / rhs;
     }
+
+    public int getArgsCount() {
+        return 0;
+    }
+
 }

@@ -27,4 +27,9 @@ public final class Jmp extends AbstractVmInstruction {
     protected void run() {
         ctx.jumpTo(target);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 1;
+    }
 }

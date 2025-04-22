@@ -29,4 +29,9 @@ public final class Not extends AbstractVmInstruction {
     protected void run() {
         ctx.push(value == 0 ? 1L : 0L);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

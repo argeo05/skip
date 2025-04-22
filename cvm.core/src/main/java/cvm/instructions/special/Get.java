@@ -19,4 +19,9 @@ public final class Get extends AbstractVmInstruction {
     public void run() {
         ctx.push(ctx.getVar(ind));
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

@@ -26,4 +26,9 @@ public final class Return extends AbstractVmInstruction {
     protected void run() {
         ctx.returnFromFunction(value);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

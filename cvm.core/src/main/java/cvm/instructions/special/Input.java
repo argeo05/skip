@@ -28,4 +28,9 @@ public final class Input extends AbstractVmInstruction {
         long value = SCANNER.nextLong();
         ctx.push(value);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

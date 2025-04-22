@@ -21,4 +21,9 @@ public final class Mod extends AbstractBinaryInstructionAbstract {
     public long calc() {
         return lhs % rhs;
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }

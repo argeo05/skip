@@ -27,4 +27,9 @@ public final class Invoke extends AbstractVmInstruction {
     protected void run() {
         ctx.invoke(value);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 1;
+    }
 }

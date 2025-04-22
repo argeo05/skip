@@ -20,7 +20,13 @@ public final class Add extends AbstractBinaryInstructionAbstract {
         super(type, ctx);
     }
 
+    @Override
     public long calc() {
         return lhs + rhs;
+    }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
     }
 }

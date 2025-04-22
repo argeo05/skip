@@ -30,4 +30,9 @@ public final class Log extends AbstractVmInstruction {
     public void run() {
         System.out.println(value);
     }
+
+    @Override
+    public int getArgsCount() {
+        return 0;
+    }
 }
