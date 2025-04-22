@@ -20,7 +20,11 @@ public enum Instructions {
     INPUT(10),
     MOD(11),
     COMPARE(12),
-    EQUAL(13);
+    EQUAL(13),
+    AND(14),
+    OR(15),
+    NOT(16),
+    XOR(17);;
 
     private static final Map<Integer, Instructions> OPCODE_TO_COMMAND_MAP = new HashMap<>();
     private final int opcode;

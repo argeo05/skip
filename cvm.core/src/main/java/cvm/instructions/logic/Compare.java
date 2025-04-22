@@ -1,4 +1,4 @@
-package cvm.instructions.comparison;
+package cvm.instructions.logic;
 
 import cvm.Context;
 import cvm.instructions.AbstractBinaryInstructionAbstract;
