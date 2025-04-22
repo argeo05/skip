@@ -302,11 +302,36 @@ Arguments:   2-byte reference
                         <td>-</td>
                     </tr>
                     <tr>
-                        <td>18-127</td>
-                        <td>-</td>
+                        <td>18</td>
+                        <td>jmp</td>
+                        <td>0</td>
+                        <td>Unconditional jump to the instruction whose index is given in the argument.</td>
+                        <td>1</td>
+                        <td>4‑byte target index (big‑endian)</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td>jmpif</td>
+                        <td>0</td>
+                        <td>Pop condition; if non‑zero ‑‑ jump to the instruction whose index is given in the argument.</td>
+                        <td>1</td>
+                        <td>4‑byte target index (big‑endian)</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>return</td>
+                        <td>0</td>
+                        <td>Pop value and return it to the caller, terminating the current stack‑frame.</td>
+                        <td>0</td>
+                        <td>‑</td>
+                    </tr>
+                    <tr>
+                        <td>21‑127</td>
+                        <td>‑</td>
+                        <td>‑</td>
                         <td>Reserved for additional instructions</td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td>‑</td>
+                        <td>‑</td>
                     </tr>
                 </tbody>
             </table>

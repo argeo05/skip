@@ -121,12 +121,36 @@ public class Context {
      */
     public void execFrame() {
         try {
-            stack.peek().exec();
-            delFrame();
+            StackFrame frame = stack.peek();
+            long result = frame.exec();
+            stack.pop();
+            if (frame.hasReturned() && !stack.isEmpty()) {
+                stack.peek().push(result);
+            }
         } catch (EmptyOperandStackException | DivisionByZeroException | StackOverflowException e) {
             unwindStack();
             throw new RuntimeException("Execution terminated: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Performs an unconditional jump to the specified instruction index
+     * in the current stack frame.
+     *
+     * @param target the instruction index to jump to
+     */
+    public void jumpTo(int target) {
+        stack.peek().setIp(target);
+    }
+
+    /**
+     * Signals a return from the current function, supplying the given value
+     * to the caller.
+     *
+     * @param value the value to return to the calling frame
+     */
+    public void returnFromFunction(long value) {
+        stack.peek().returnLong(value);
     }
 
     /**

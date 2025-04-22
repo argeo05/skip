@@ -22,6 +22,10 @@ public class StackFrame {
     private final Function fun;
     private final long[] variables;
 
+    private int ip = 0;
+    private boolean returnFlag = false;
+    private long returnValue;
+
     private StackFrame(LimitedLongStack operandStack, Function fun, long[] variables) {
         this.operandStack = operandStack;
         this.fun = fun;
@@ -38,6 +42,34 @@ public class StackFrame {
     public StackFrame(Function fun, long[] initialValues, int operandStackLimit) {
         this(new LimitedLongStack(operandStackLimit), fun, new long[fun.argc() + fun.variablesCount()]);
         System.arraycopy(initialValues, 0, this.variables, 0, initialValues.length);
+    }
+
+    /**
+     * Sets the instruction pointer to the given instruction index.
+     *
+     * @param target the index of the instruction to jump to
+     */
+    public void setIp(int target) {
+        this.ip = target;
+    }
+
+    /**
+     * Indicates whether this frame has performed an explicit return.
+     *
+     * @return true if a return instruction was executed
+     */
+    public boolean hasReturned() {
+        return returnFlag;
+    }
+
+    /**
+     * Records the return value and marks this frame as completed.
+     *
+     * @param value the value to return from this function
+     */
+    public void returnLong(long value) {
+        this.returnValue = value;
+        this.returnFlag = true;
     }
 
     /**
@@ -99,12 +131,25 @@ public class StackFrame {
     }
 
     /**
-     * Executes the sequence of instructions associated with the function.
+     * Executes instructions in this frame until a return occurs or the end is reached.
+     *
+     * @return the value returned by the function
+     * @throws RuntimeException if the function ends without a return instruction
      */
-    public void exec() {
-        for (AbstractVmInstruction instruction : fun.code()) {
-            currInstruction = instruction;
-            instruction.invoke();
+    /**
+     * Executes instructions in this frame. Stops on explicit return or end of code.
+     *
+     * @return the value given to returnLong, or 0 if no explicit return occurred
+     */
+    public long exec() {
+        while (ip < fun.code().size()) {
+            currInstruction = fun.code().get(ip);
+            currInstruction.invoke();
+            if (returnFlag) {
+                return returnValue;
+            }
+            ip++;
         }
+        return 0L;
     }
 }

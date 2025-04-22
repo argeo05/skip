@@ -24,7 +24,10 @@ public enum Instructions {
     AND(14),
     OR(15),
     NOT(16),
-    XOR(17);
+    XOR(17),
+    JMP(18),
+    JMPIF(19),
+    RETURN(20);
 
     private static final Map<Integer, Instructions> OPCODE_TO_COMMAND_MAP = new HashMap<>();
     private final int opcode;
