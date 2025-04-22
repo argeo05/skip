@@ -1,5 +1,6 @@
 package cvm.instructions;
 
+import cvm.instructions.logic.Not;
 import cvm.instructions.special.Debug;
 import cvm.instructions.special.Get;
 import cvm.instructions.special.Input;
@@ -13,7 +14,7 @@ import cvm.instructions.special.Put;
  * Based interface for instuctions.
  */
 public abstract sealed class AbstractVmInstruction
-        permits AbstractBinaryInstructionAbstract, Debug, Get, Input, Invoke, Load, Log, Put {
+        permits AbstractBinaryInstructionAbstract, Not, Debug, Get, Input, Invoke, Load, Log, Put {
     protected Byte type;
 
     public AbstractVmInstruction(Byte type) {
