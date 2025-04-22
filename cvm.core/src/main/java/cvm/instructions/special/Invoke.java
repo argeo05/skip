@@ -4,7 +4,7 @@ import cvm.Context;
 import cvm.instructions.AbstractVmInstruction;
 
 /**
- * <b>Load</b>
+ * <b>Ld</b>
  * Instruction. Invokes function.
  *
  * @bytecode invoke

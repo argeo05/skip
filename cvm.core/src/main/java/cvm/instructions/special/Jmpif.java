@@ -4,16 +4,16 @@ import cvm.Context;
 import cvm.instructions.AbstractVmInstruction;
 
 /**
- * <b>JmpIf</b> Instruction. Jump with condition.
+ * <b>Jmpif</b> Instruction. Jump with condition.
  * @bytecode jmpif
  * @opcode 19
  */
-public final class JmpIf extends AbstractVmInstruction {
+public final class Jmpif extends AbstractVmInstruction {
     private final Context ctx;
     private final int target;
     private long cond;
 
-    public JmpIf(byte type, int target, Context ctx) {
+    public Jmpif(byte type, int target, Context ctx) {
         super(type);
         this.ctx = ctx;
         this.target = target;
