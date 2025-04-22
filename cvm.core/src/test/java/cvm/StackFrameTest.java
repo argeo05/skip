@@ -2,7 +2,7 @@ package cvm;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import cvm.instructions.special.Load;
+import cvm.instructions.special.Ld;
 import cvm.exceptions.EmptyOperandStackException;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class StackFrameTest {
         Context ctx = new Context();
         StackFrame frame = new StackFrame(f, new long[0], 5);
         ctx.getStack().push(frame);
-        f.addInstruction(new Load((byte)0, 9L, ctx));
+        f.addInstruction(new Ld((byte)0, 9L, ctx));
         frame.exec();
         assertEquals(9L, frame.top());
     }
