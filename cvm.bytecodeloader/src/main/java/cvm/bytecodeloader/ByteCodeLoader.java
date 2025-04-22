@@ -13,8 +13,6 @@ import cvm.instructions.AbstractVmInstruction;
 import cvm.instructions.Instructions;
 import utils.BytesParser;
 
-import static cvm.bytecodeloader.InstructionBuilderResolver.resolve;
-
 /**
  * {@code ByteCodeLoader} reads CVM binary format,
  * translates into VM structures and wires them into a ready-to-run {@link cvm.Context context}.
@@ -158,10 +156,8 @@ public class ByteCodeLoader {
                     } else {
                         args = new String[0];
                     }
-                    AbstractVmInstruction instruction = resolve(mnemonic)
-                            .setCtx(ctx)
-                            .setArgs(args)
-                            .build((byte) instrType);
+                    AbstractVmInstruction instruction = ReflectiveInstructionFactory
+                            .create(mnemonic, args, ctx, (byte) instrType);
                     fun.addInstruction(instruction);
                 }
                 ctx.addFun(fun);
