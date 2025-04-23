@@ -5,6 +5,7 @@ import cvm.instructions.AbstractVmInstruction;
 
 /**
  * <b>Jmpif</b> Instruction. Jump with condition.
+ *
  * @bytecode jmpif
  * @opcode 19
  */

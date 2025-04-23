@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 
 public class CompilerTest {
     @Test
-    void testCompileOutput() throws Exception {
+    void testCompileOutput1() throws Exception {
         Path resDir = Paths.get("src", "test", "resources");
-        Path input = resDir.resolve("inputcomplier.txt");
-        Path expected = resDir.resolve("outputcomplier.sosa");
-        Path output = resDir.resolve("actual.sosa");
+        Path input = resDir.resolve("inputcomplier1.txt");
+        Path expected = resDir.resolve("outputcomplier1.sosa");
+        Path output = resDir.resolve("result1.sosa");
 
         Files.deleteIfExists(output);
 
@@ -29,5 +29,27 @@ public class CompilerTest {
         assertArrayEquals(
                 expectedBytes,
                 actualBytes);
+    }
+
+    @Test
+    void testCompileOutput2() throws Exception {
+        Path resDir = Paths.get("src", "test", "resources");
+        Path input = resDir.resolve("inputcomplier2.txt");
+//        Path expected = resDir.resolve("outputcomplier2.sosa");
+        Path output = resDir.resolve("result2.sosa");
+
+        Files.deleteIfExists(output);
+
+        new Compiler().compile(
+                input.toString(),
+                output.toString()
+        );
+
+        byte[] actualBytes = Files.readAllBytes(output);
+//        byte[] expectedBytes = Files.readAllBytes(expected);
+//
+//        assertArrayEquals(
+//                expectedBytes,
+//                actualBytes);
     }
 }

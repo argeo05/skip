@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cvm.instructions.Instructions;
 import utils.BytesParser;
@@ -39,20 +41,62 @@ public class Compiler {
         List<Constant> constantTable = new ArrayList<>();
         List<CompiledFunction> functions = new ArrayList<>();
 
+        // parse functions before const
         while (i < lines.length) {
             String trimmed = lines[i].trim();
             if (trimmed.isEmpty() || trimmed.startsWith(";")) {
                 i++;
                 continue;
             }
-            break;
+            if (trimmed.toLowerCase().startsWith("const ")) {
+                break;
+            }
+            if (trimmed.toLowerCase().startsWith("fun ")) {
+                String[] parts = trimmed.split("\\s+");
+                String funName = parts[1];
+                int argc = Integer.parseInt(parts[2]);
+                int varCount = Integer.parseInt(parts[3]);
+                if (findConstantIndex(constantTable, funName) < 0) {
+                    constantTable.add(new Constant(Constant.Type.STRING, funName));
+                }
+
+                CompiledFunction func = new CompiledFunction(funName, argc, varCount);
+                i++;
+
+                Map<String, Integer> labelPositions = new HashMap<>();
+                List<String[]> instrTokens = new ArrayList<>();
+
+                while (i < lines.length && (lines[i].startsWith(" ") || lines[i].startsWith("\t"))) {
+                    String instrLine = lines[i].replaceAll(";.*", "").trim();
+                    if (!instrLine.isEmpty()) {
+                        if (instrLine.toLowerCase().startsWith("lb ")) {
+                            String label = instrLine.substring(3).trim();
+                            labelPositions.put(label, instrTokens.size());
+                        } else {
+                            instrTokens.add(instrLine.split("\\s+"));
+                        }
+                    }
+                    i++;
+                }
+
+                for (String[] tok : instrTokens) {
+                    String mnem = tok[0].toLowerCase();
+                    if ((mnem.equals("jmp") || mnem.equals("jmpif")) && labelPositions.containsKey(tok[1])) {
+                        tok[1] = String.valueOf(labelPositions.get(tok[1]));
+                    }
+                    Instruction instr = parseInstruction(String.join(" ", tok), constantTable);
+                    func.instructions.add(instr);
+                }
+
+                functions.add(func);
+            } else {
+                i++;
+            }
         }
 
+        // parse const block
         if (i < lines.length && lines[i].trim().toLowerCase().startsWith("const ")) {
             String[] parts = lines[i].trim().split("\\s+");
-            if (parts.length < 2) {
-                throw new RuntimeException("Incorrect constant block definition");
-            }
             int constCount = Integer.parseInt(parts[1]);
             i++;
             for (int j = 0; j < constCount && i < lines.length;) {
@@ -60,9 +104,6 @@ public class Compiler {
                 if (line.startsWith(" ") || line.startsWith("\t")) {
                     String trimmed = line.trim();
                     int spaceIndex = trimmed.indexOf(' ');
-                    if (spaceIndex < 0) {
-                        throw new RuntimeException("Incorrect constant definition: " + trimmed);
-                    }
                     String literal = trimmed.substring(spaceIndex + 1).trim();
                     if (literal.startsWith("\"") && literal.endsWith("\"") && literal.length() >= 2) {
                         literal = literal.substring(1, literal.length() - 1);
@@ -80,7 +121,7 @@ public class Compiler {
             }
         }
 
-        // Parse function definitions
+        // parse functions after const
         while (i < lines.length) {
             String trimmed = lines[i].trim();
             if (trimmed.isEmpty() || trimmed.startsWith(";")) {
@@ -90,10 +131,6 @@ public class Compiler {
 
             if (trimmed.toLowerCase().startsWith("fun ")) {
                 String[] parts = trimmed.split("\\s+");
-                if (parts.length < 4) {
-                    throw new RuntimeException("Incorrect function declaration: " + trimmed);
-                }
-
                 String funName = parts[1];
                 int argc = Integer.parseInt(parts[2]);
                 int varCount = Integer.parseInt(parts[3]);
@@ -106,13 +143,10 @@ public class Compiler {
 
                 while (i < lines.length && (lines[i].startsWith(" ") || lines[i].startsWith("\t"))) {
                     String instrLine = lines[i].replaceAll(";.*", "").trim();
-                    if (instrLine.isEmpty()) {
-                        i++;
-                        continue;
+                    if (!instrLine.isEmpty()) {
+                        Instruction instr = parseInstruction(instrLine, constantTable);
+                        func.instructions.add(instr);
                     }
-
-                    Instruction instr = parseInstruction(instrLine, constantTable);
-                    func.instructions.add(instr);
                     i++;
                 }
                 functions.add(func);

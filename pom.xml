@@ -17,8 +17,8 @@
     <modules>
         <module>App</module>
         <module>cvm.core</module>
-        <module>cvm.bytecodeloader</module>
         <module>compiler</module>
+        <module>cvm.bytecodeloader</module>
         <module>disassembler</module>
         <module>utils</module>
     </modules>

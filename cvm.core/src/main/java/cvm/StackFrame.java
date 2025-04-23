@@ -136,11 +136,6 @@ public class StackFrame {
      * @return the value returned by the function
      * @throws RuntimeException if the function ends without a return instruction
      */
-    /**
-     * Executes instructions in this frame. Stops on explicit return or end of code.
-     *
-     * @return the value given to returnLong, or 0 if no explicit return occurred
-     */
     public long exec() {
         while (ip < fun.code().size()) {
             currInstruction = fun.code().get(ip);
