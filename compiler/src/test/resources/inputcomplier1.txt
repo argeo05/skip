@@ -1,7 +1,6 @@
-const 3
+;Comment
+const 1
     0 5
-    1 "main"
-    2 "echo"
 
 fun main 0 2
     ldc 0
@@ -13,9 +12,8 @@ fun main 0 2
     get 1
     ld 19
     sub
-    invoke "echo"
+    invoke echo
 
 fun echo 2 0
     add
     log
-
