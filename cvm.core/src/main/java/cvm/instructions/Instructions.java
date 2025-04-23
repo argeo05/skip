@@ -55,4 +55,13 @@ public enum Instructions {
     public static Instructions fromOpcode(int opcode) {
         return OPCODE_TO_COMMAND_MAP.get(opcode);
     }
+
+    public static boolean requiresArgument(int opcode) {
+        return opcode == Instructions.LD.getOpcode()
+                || opcode == Instructions.GET.getOpcode()
+                || opcode == Instructions.PUT.getOpcode()
+                || opcode == Instructions.INVOKE.getOpcode()
+                || opcode == Instructions.JMP.getOpcode()
+                || opcode == Instructions.JMPIF.getOpcode();
+    }
 }

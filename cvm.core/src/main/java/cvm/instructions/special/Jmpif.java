@@ -11,10 +11,10 @@ import cvm.instructions.AbstractVmInstruction;
  */
 public final class Jmpif extends AbstractVmInstruction {
     private final Context ctx;
-    private final int target;
+    private final long target;
     private long cond;
 
-    public Jmpif(byte type, int target, Context ctx) {
+    public Jmpif(byte type, long target, Context ctx) {
         super(type);
         this.ctx = ctx;
         this.target = target;
@@ -28,7 +28,7 @@ public final class Jmpif extends AbstractVmInstruction {
     @Override
     protected void run() {
         if (cond != 0) {
-            ctx.jumpTo(target);
+            ctx.jumpTo((int) target);
         }
     }
 
