@@ -5,16 +5,23 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import cvm.instructions.Instructions;
 import utils.BytesParser;
 
+import static cvm.instructions.Instructions.requiresArgument;
+
 /**
  * Utility for converting compiled bytecode files into a human-readable
- * assembly-like representation, including constants and instructions.
+ * assembly-like representation, включая метки для переходов.
  */
 public final class Disassembler {
 
@@ -41,127 +48,110 @@ public final class Disassembler {
                 throw new IOException("Invalid magic bytes");
             }
 
-            byte[] versionBytes = new byte[6];
-            dis.readFully(versionBytes);
-
-            byte[] constCountBytes = new byte[4];
-            dis.readFully(constCountBytes);
-            int constantCount = (int) BytesParser.toDeciminal(constCountBytes);
-
-            byte[] funCountBytes = new byte[4];
-            dis.readFully(funCountBytes);
-            int functionCount = (int) BytesParser.toDeciminal(funCountBytes);
-
+            dis.skipBytes(6);
+            int constantCount = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+            int functionCount = (int) BytesParser.toDeciminal(dis.readNBytes(4));
             dis.skipBytes(20);
 
             List<String> constants = new ArrayList<>();
             writer.write("const " + constantCount + "\n");
             for (int i = 0; i < constantCount; i++) {
                 int type = dis.readUnsignedByte();
-                String value;
-                byte[] data;
+                writer.write("    " + i + " ");
                 switch (type) {
-                    case 1: // INTEGER
-                        data = new byte[4];
-                        dis.readFully(data);
-                        int intValue = (int) BytesParser.toDeciminal(data);
-                        value = String.valueOf(intValue);
-                        break;
-                    case 2: // FLOAT
-                        data = new byte[4];
-                        dis.readFully(data);
-                        int bits = (int) BytesParser.toDeciminal(data);
+                    case 1 -> { // INTEGER
+                        int v = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+                        writer.write(v + "\n");
+                        constants.add(String.valueOf(v));
+                    }
+                    case 2 -> { // FLOAT
+                        int bits = (int) BytesParser.toDeciminal(dis.readNBytes(4));
                         float f = Float.intBitsToFloat(bits);
-                        value = String.valueOf(f);
-                        break;
-                    case 3: // STRING
-                        byte[] lenBytes = new byte[4];
-                        dis.readFully(lenBytes);
-                        int len = (int) BytesParser.toDeciminal(lenBytes);
-                        byte[] strBytes = new byte[len];
-                        dis.readFully(strBytes);
-                        value = "\"" + new String(strBytes, "UTF-8") + "\"";
-                        break;
-                    default:
-                        throw new IOException("Unknown constant type: " + type);
+                        writer.write(f + "\n");
+                        constants.add(String.valueOf(f));
+                    }
+                    case 3 -> { // STRING
+                        int len = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+                        byte[] bs = dis.readNBytes(len);
+                        String s = new String(bs, StandardCharsets.UTF_8);
+                        writer.write("\"" + s + "\"\n");
+                        constants.add(s);
+                    }
+                    default -> throw new IOException("Unknown constant type: " + type);
                 }
-                constants.add(value);
-                writer.write("    " + i + " " + value + "\n");
             }
-
             writer.write("\n");
 
             for (int f = 0; f < functionCount; f++) {
-                byte[] nameLenBytes = new byte[4];
-                dis.readFully(nameLenBytes);
-                int nameLen = (int) BytesParser.toDeciminal(nameLenBytes);
-                byte[] nameBytes = new byte[nameLen];
-                dis.readFully(nameBytes);
-                String funName = new String(nameBytes, "UTF-8");
-
-                byte[] argcBytes = new byte[4];
-                dis.readFully(argcBytes);
-                int argc = (int) BytesParser.toDeciminal(argcBytes);
-
-                byte[] varCountBytes = new byte[4];
-                dis.readFully(varCountBytes);
-                int varCount = (int) BytesParser.toDeciminal(varCountBytes);
-
-                byte[] instrCountBytes = new byte[4];
-                dis.readFully(instrCountBytes);
-                int instrCount = (int) BytesParser.toDeciminal(instrCountBytes);
+                int nameLen = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+                String funName = new String(dis.readNBytes(nameLen), StandardCharsets.UTF_8);
+                int argc = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+                int varCount = (int) BytesParser.toDeciminal(dis.readNBytes(4));
+                int instrCount = (int) BytesParser.toDeciminal(dis.readNBytes(4));
 
                 writer.write("fun " + funName + " " + argc + " " + varCount + "\n");
 
-                for (int j = 0; j < instrCount; j++) {
+                class Instr {
+                    String mnemonic;
+                    int target = -1;
+                    String rawArg = "";
+                }
+
+                List<Instr> instrs = new ArrayList<>(instrCount);
+                Set<Integer> jumpTargets = new HashSet<>();
+
+                for (int idx = 0; idx < instrCount; idx++) {
                     int opcode = dis.readUnsignedByte();
                     int instrType = dis.readUnsignedByte();
-
                     Instructions ins = Instructions.fromOpcode(opcode);
                     if (ins == null) {
                         throw new IOException("Unknown opcode: " + opcode);
                     }
-                    String mnemonic = ins.name().toLowerCase();
-                    if (mnemonic.equals("ld") && instrType == 1) {
-                        mnemonic = "ldc";
+                    String mnem = ins.name().toLowerCase();
+                    if ("ld".equals(mnem) && instrType == 1) {
+                        mnem = "ldc";
                     }
 
-                    String argStr = "";
+                    Instr rec = new Instr();
+                    rec.mnemonic = mnem;
+
                     if (requiresArgument(opcode)) {
-                        byte[] argBytes = new byte[4];
-                        dis.readFully(argBytes);
-                        int arg = (int) BytesParser.toDeciminal(argBytes);
+                        int arg = (int) BytesParser.toDeciminal(dis.readNBytes(4));
                         if (ins == Instructions.INVOKE && arg >= 0 && arg < constants.size()) {
-                            argStr = " " + constants.get(arg);
+                            rec.rawArg = "\"" + constants.get(arg) + "\"";
+                        } else if (ins == Instructions.JMP || ins == Instructions.JMPIF) {
+                            rec.target = arg;
+                            jumpTargets.add(arg);
                         } else {
-                            argStr = " " + arg;
+                            rec.rawArg = String.valueOf(arg);
                         }
                     }
-                    writer.write("    " + mnemonic + argStr + "\n");
+                    instrs.add(rec);
+                }
+
+                Map<Integer, String> labelNames = new HashMap<>();
+                for (Integer tgt : jumpTargets) {
+                    labelNames.put(tgt, "L" + tgt);
+                }
+
+                for (int idx = 0; idx < instrs.size(); idx++) {
+                    if (labelNames.containsKey(idx)) {
+                        writer.write("    lb " + labelNames.get(idx) + "\n");
+                    }
+                    Instr ins = instrs.get(idx);
+                    String argOut = "";
+                    if (ins.target >= 0) {
+                        argOut = " " + labelNames.get(ins.target);
+                    } else if (!ins.rawArg.isEmpty()) {
+                        argOut = " " + ins.rawArg;
+                    }
+                    writer.write("    " + ins.mnemonic + argOut + "\n");
                 }
                 writer.write("\n");
             }
         }
     }
 
-    // private helper omitted from Javadoc
-    private static boolean requiresArgument(int opcode) {
-        return opcode == Instructions.LD.getOpcode()
-                ||
-                opcode == Instructions.GET.getOpcode()
-                ||
-                opcode == Instructions.PUT.getOpcode()
-                ||
-                opcode == Instructions.INVOKE.getOpcode();
-    }
-
-    /**
-     * Entry point for command-line usage. Expects two arguments:
-     * the input bytecode file path and the output text file path.
-     * Prints usage instructions or error details to standard error.
-     *
-     * @param args command-line arguments: [inputPath, outputPath]
-     */
     public static void main(String[] args) {
         if (args.length != 2) {
             System.err.println("Usage: Disassembler <inputPath> <outputPath>");

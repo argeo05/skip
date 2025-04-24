@@ -41,16 +41,53 @@ public class Compiler {
         List<Constant> constantTable = new ArrayList<>();
         List<CompiledFunction> functions = new ArrayList<>();
 
-        // parse functions before const
+        // parse lines before const
         while (i < lines.length) {
             String trimmed = lines[i].trim();
             if (trimmed.isEmpty() || trimmed.startsWith(";")) {
                 i++;
                 continue;
             }
-            if (trimmed.toLowerCase().startsWith("const ")) {
+            if (trimmed.toLowerCase().startsWith("const ") || trimmed.toLowerCase().startsWith("fun ")) {
                 break;
             }
+            i++;
+        }
+
+        // parse const block
+        if (i < lines.length && lines[i].trim().toLowerCase().startsWith("const ")) {
+            String[] parts = lines[i].trim().split("\\s+");
+            int constCount = Integer.parseInt(parts[1]);
+            i++;
+            for (int j = 0; j < constCount && i < lines.length;) {
+                String line = lines[i];
+                if (line.startsWith(" ") || line.startsWith("\t")) {
+                    String trimmed = line.trim();
+                    int spaceIndex = trimmed.indexOf(' ');
+                    String literal = trimmed.substring(spaceIndex + 1).trim();
+                    if (literal.startsWith("\"") && literal.endsWith("\"") && literal.length() >= 2) {
+                        literal = literal.substring(1, literal.length() - 1);
+                        constantTable.add(new Constant(Constant.Type.STRING, literal));
+                    } else if (literal.contains(".")) {
+                        float f = Float.parseFloat(literal);
+                        constantTable.add(new Constant(Constant.Type.FLOAT, f));
+                    } else {
+                        int val = Integer.parseInt(literal);
+                        constantTable.add(new Constant(Constant.Type.INTEGER, val));
+                    }
+                    j++;
+                }
+                i++;
+            }
+        }
+
+        while (i < lines.length) {
+            String trimmed = lines[i].trim();
+            if (trimmed.isEmpty() || trimmed.startsWith(";")) {
+                i++;
+                continue;
+            }
+
             if (trimmed.toLowerCase().startsWith("fun ")) {
                 String[] parts = trimmed.split("\\s+");
                 String funName = parts[1];
@@ -88,67 +125,6 @@ public class Compiler {
                     func.instructions.add(instr);
                 }
 
-                functions.add(func);
-            } else {
-                i++;
-            }
-        }
-
-        // parse const block
-        if (i < lines.length && lines[i].trim().toLowerCase().startsWith("const ")) {
-            String[] parts = lines[i].trim().split("\\s+");
-            int constCount = Integer.parseInt(parts[1]);
-            i++;
-            for (int j = 0; j < constCount && i < lines.length;) {
-                String line = lines[i];
-                if (line.startsWith(" ") || line.startsWith("\t")) {
-                    String trimmed = line.trim();
-                    int spaceIndex = trimmed.indexOf(' ');
-                    String literal = trimmed.substring(spaceIndex + 1).trim();
-                    if (literal.startsWith("\"") && literal.endsWith("\"") && literal.length() >= 2) {
-                        literal = literal.substring(1, literal.length() - 1);
-                        constantTable.add(new Constant(Constant.Type.STRING, literal));
-                    } else if (literal.contains(".")) {
-                        float f = Float.parseFloat(literal);
-                        constantTable.add(new Constant(Constant.Type.FLOAT, f));
-                    } else {
-                        int val = Integer.parseInt(literal);
-                        constantTable.add(new Constant(Constant.Type.INTEGER, val));
-                    }
-                    j++;
-                }
-                i++;
-            }
-        }
-
-        // parse functions after const
-        while (i < lines.length) {
-            String trimmed = lines[i].trim();
-            if (trimmed.isEmpty() || trimmed.startsWith(";")) {
-                i++;
-                continue;
-            }
-
-            if (trimmed.toLowerCase().startsWith("fun ")) {
-                String[] parts = trimmed.split("\\s+");
-                String funName = parts[1];
-                int argc = Integer.parseInt(parts[2]);
-                int varCount = Integer.parseInt(parts[3]);
-                if (findConstantIndex(constantTable, funName) < 0) {
-                    constantTable.add(new Constant(Constant.Type.STRING, funName));
-                }
-
-                CompiledFunction func = new CompiledFunction(funName, argc, varCount);
-                i++;
-
-                while (i < lines.length && (lines[i].startsWith(" ") || lines[i].startsWith("\t"))) {
-                    String instrLine = lines[i].replaceAll(";.*", "").trim();
-                    if (!instrLine.isEmpty()) {
-                        Instruction instr = parseInstruction(instrLine, constantTable);
-                        func.instructions.add(instr);
-                    }
-                    i++;
-                }
                 functions.add(func);
             } else {
                 i++;
@@ -271,6 +247,24 @@ public class Compiler {
             } else {
                 instr.argument = Integer.parseInt(argStr.substring(1));
             }
+        } else if (mnemonic.equalsIgnoreCase("le")) {
+            instr.opcode = (byte) Instructions.COMPARE.getOpcode();
+            instr.type = 0;
+        } else if (mnemonic.equalsIgnoreCase("lt")) {
+            instr.opcode = (byte) Instructions.COMPARE.getOpcode();
+            instr.type = 1;
+        } else if (mnemonic.equalsIgnoreCase("ge")) {
+            instr.opcode = (byte) Instructions.COMPARE.getOpcode();
+            instr.type = 2;
+        } else if (mnemonic.equalsIgnoreCase("gt")) {
+            instr.opcode = (byte) Instructions.COMPARE.getOpcode();
+            instr.type = 3;
+        } else if (mnemonic.equalsIgnoreCase("eq")) {
+            instr.opcode = (byte) Instructions.EQUAL.getOpcode();
+            instr.type = 0;
+        } else if (mnemonic.equalsIgnoreCase("ne")) {
+            instr.opcode = (byte) Instructions.EQUAL.getOpcode();
+            instr.type = 1;
         } else {
             try {
                 Instructions ins = Instructions.valueOf(mnemonic.toUpperCase());

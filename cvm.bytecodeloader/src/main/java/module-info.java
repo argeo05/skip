@@ -3,7 +3,5 @@ module cvm.bytecodeloader {
     requires utils;
 
     exports cvm.bytecodeloader;
-    exports cvm.bytecodeloader.instructions;
 
-    opens cvm.bytecodeloader.instructions to utils;
 }

@@ -17,9 +17,9 @@ public class ReflectiveInstructionFactory {
      * Creates an instruction instance based on its mnemonic, arguments, context, and type.
      *
      * @param mnemonic lower-case instruction name
-     * @param args instruction arguments
-     * @param ctx execution context
-     * @param type instruction type byte
+     * @param args     instruction arguments
+     * @param ctx      execution context
+     * @param type     instruction type byte
      * @return a new AbstractVmInstruction
      */
     public static AbstractVmInstruction create(
@@ -29,13 +29,17 @@ public class ReflectiveInstructionFactory {
             byte type
     ) {
         Class<?> target = findInstructionClass(mnemonic);
+
         for (Constructor<?> ctor : target.getConstructors()) {
             Class<?>[] pts = ctor.getParameterTypes();
+
             if (pts.length != args.length + 2) {
                 continue;
             }
+
             Object[] initArgs = new Object[pts.length];
             int argIdx = 0;
+
             try {
                 for (int i = 0; i < pts.length; i++) {
                     Class<?> p = pts[i];
@@ -55,11 +59,14 @@ public class ReflectiveInstructionFactory {
                         throw new IllegalArgumentException();
                     }
                 }
+
                 return (AbstractVmInstruction) ctor.newInstance(initArgs);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                     | IllegalArgumentException e) {
                 System.out.println(e);
             }
         }
+
         throw new IllegalArgumentException("Instruction not found for: " + mnemonic);
     }
 
