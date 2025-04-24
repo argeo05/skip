@@ -1,18 +1,20 @@
 ;Comment
 const 1
-    0 8
+    0 2
 
-fun main 0 2
-    ld 5
+fun main 0 1
+    ldc 0
     put 0
-    ld 7
-    put 1
+    lb loop
+        get 0
+        ldc 1
+        add
+        put 0
+        ld 12
+        eq
+        jmpif loop
     get 0
-    ld 24
-    get 1
-    ld 19
-    sub
-    invoke echo
+    log
 
 fun echo 2 0
     add

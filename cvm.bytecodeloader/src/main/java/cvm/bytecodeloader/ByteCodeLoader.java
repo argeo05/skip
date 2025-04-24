@@ -13,6 +13,8 @@ import cvm.instructions.AbstractVmInstruction;
 import cvm.instructions.Instructions;
 import utils.BytesParser;
 
+import static cvm.instructions.Instructions.requiresArgument;
+
 /**
  * {@code ByteCodeLoader} reads CVM binary format,
  * translates into VM structures and wires them into a ready-to-run {@link cvm.Context context}.
@@ -20,7 +22,7 @@ import utils.BytesParser;
  * <p>Validates file header (magic number, version, section lengths) and deserialises:</p>
  * <p>After {@link #parse()} completes successfully, invoke {@link cvm.Context#start()} to begin execution.</p>
  *
- * @see InstructionBuilderResolver
+ * @see ReflectiveInstructionFactory
  */
 public class ByteCodeLoader {
 
@@ -185,23 +187,5 @@ public class ByteCodeLoader {
             System.err.println("Parsing failed: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Determines whether an opcode requires a four‑byte integer argument.
-     * Package‑private for testability.
-     *
-     * @param opcode numeric opcode as defined in {@link Instructions}
-     * @return {@code true} if the instruction expects an argument; {@code false}
-     * otherwise
-     */
-    boolean requiresArgument(int opcode) {
-        return opcode == Instructions.LD.getOpcode()
-                ||
-                opcode == Instructions.GET.getOpcode()
-                ||
-                opcode == Instructions.PUT.getOpcode()
-                ||
-                opcode == Instructions.INVOKE.getOpcode();
     }
 }
